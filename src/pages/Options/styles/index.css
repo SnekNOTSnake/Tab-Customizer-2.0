@@ -1,0 +1,12 @@
+body {
+	font-family: roboto, 'source sans pro', Arial, Helvetica, sans-serif;
+	color: rgba(0, 0, 0, 0.87);
+	margin: 0;
+}
+p {
+	line-height: 1.5;
+	letter-spacing: 0.00938em;
+}
+.MuiListItem-button:hover {
+	background-color: rgba(0, 0, 0, 1);
+}
