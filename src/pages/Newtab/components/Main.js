@@ -1,5 +1,10 @@
 import React from 'react';
 import clsx from 'clsx';
+import {
+	SortableContainer,
+	SortableElement,
+	arrayMove,
+} from 'react-sortable-hoc';
 
 import DataContext from '../dataContext';
 import useStyle from '../styles/Main-style';
@@ -16,9 +21,12 @@ import AddIcon from '@material-ui/icons/AddRounded';
 const loader = document.querySelector('.loader');
 
 const Main = () => {
-	const { backgrounds: bgKeys, shortcuts, defaultColor } = React.useContext(
-		DataContext
-	);
+	const {
+		setShortcuts,
+		backgrounds: bgKeys,
+		shortcuts,
+		defaultColor,
+	} = React.useContext(DataContext);
 
 	const root = React.useRef();
 	const [background, setBackground] = React.useState('');
@@ -72,24 +80,39 @@ const Main = () => {
 	}, [background]);
 
 	const classes = useStyle({ defaultColor });
+
+	// Sortable HOC
+	const onSortEnd = ({ oldIndex, newIndex }) => {
+		setShortcuts((initVal) => arrayMove(initVal, oldIndex, newIndex));
+	};
+	const SortableItem = SortableElement(({ item }) => (
+		<a
+			href={`https://${item.url}`}
+			index={item.key}
+			onContextMenu={openContext}
+			className={classes.shortcut}
+			key={item.key}
+		>
+			<Paper
+				style={{ backgroundImage: `url(${item.image})` }}
+				className={classes.icon}
+			/>
+			<div className={classes.text}>{item.name}</div>
+		</a>
+	));
+	const SortableList = SortableContainer(({ items }) => {
+		return (
+			<div className="sortable">
+				{items.map((item, index) => (
+					<SortableItem index={index} item={item} key={item.key} />
+				))}
+			</div>
+		);
+	});
 	return (
 		<div ref={root} className={classes.root}>
 			<div className={classes.shortcuts}>
-				{shortcuts.map((shortcut) => (
-					<a
-						href={`https://${shortcut.url}`}
-						index={shortcut.key}
-						onContextMenu={openContext}
-						className={classes.shortcut}
-						key={shortcut.key}
-					>
-						<Paper
-							style={{ backgroundImage: `url(${shortcut.image})` }}
-							className={classes.icon}
-						/>
-						<div className={classes.text}>{shortcut.name}</div>
-					</a>
-				))}
+				<SortableList items={shortcuts} onSortEnd={onSortEnd} axis="xy" />
 				<div className={clsx(classes.shortcut, classes.addShortcut)}>
 					<Paper onClick={() => openDialog()} className={classes.icon}>
 						<AddIcon className={classes.addShortcutIcon} />

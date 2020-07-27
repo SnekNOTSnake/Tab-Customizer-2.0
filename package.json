@@ -24,7 +24,8 @@
 		"react-dom": "^16.13.1",
 		"react-hook-form": "^6.1.0",
 		"react-hot-loader": "^4.12.20",
-		"react-router-dom": "^5.2.0"
+		"react-router-dom": "^5.2.0",
+		"react-sortable-hoc": "^1.11.0"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.9.0",
