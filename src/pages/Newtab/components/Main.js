@@ -7,6 +7,8 @@ import ContextMenu from './ContextMenu';
 import FormDialog from './FormDialog';
 import { idbAction } from '../../utils/helpers';
 
+import SettingsIcon from '@material-ui/icons/Settings';
+import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import AddIcon from '@material-ui/icons/AddRounded';
 
@@ -14,11 +16,18 @@ import AddIcon from '@material-ui/icons/AddRounded';
 const loader = document.querySelector('.loader');
 
 const Main = () => {
-	const { backgrounds, shortcuts, defaultColor } = React.useContext(
+	const { backgrounds: bgKeys, shortcuts, defaultColor } = React.useContext(
 		DataContext
 	);
 
+	const root = React.useRef();
 	const [background, setBackground] = React.useState('');
+
+	// Open Options
+	const openOptionsPage = () => {
+		if (chrome.runtime.openOptionsPage) chrome.runtime.openOptionsPage();
+		else window.open(chrome.runtime.getURL('options.html'));
+	};
 
 	// Anchor for Context Menu
 	const [anchorEl, setAnchorEl] = React.useState(null);
@@ -40,37 +49,31 @@ const Main = () => {
 		setOpen(false);
 	};
 
-	const closeLoader = () => {
-		requestAnimationFrame(() => {
-			requestAnimationFrame(() => {
-				loader.classList.add('loaded');
-			});
-		});
-	};
 	const fetchBackground = React.useCallback(async () => {
-		if (backgrounds.length) {
-			const rand = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+		if (bgKeys.length) {
+			// Load random image from DB
+			const rand = bgKeys[Math.floor(Math.random() * bgKeys.length)];
 			const bg = await idbAction('backgrounds', 'getOne', rand);
 			setBackground(bg.image);
 		}
-	}, [backgrounds]);
+	}, [bgKeys]);
 
 	React.useEffect(() => {
 		fetchBackground();
 	}, [fetchBackground]);
 
+	React.useEffect(() => {
+		const img = new Image();
+		img.src = background;
+		img.addEventListener('load', () => {
+			root.current.style.backgroundImage = `url(${background})`;
+			loader.classList.add('loaded');
+		});
+	}, [background]);
+
 	const classes = useStyle({ defaultColor });
 	return (
-		<div
-			style={{ backgroundImage: `url(${background})` }}
-			className={classes.root}
-		>
-			<img
-				style={{ display: 'none' }}
-				onLoad={closeLoader}
-				src={background}
-				alt="Wallpaper"
-			/>
+		<div ref={root} className={classes.root}>
 			<div className={classes.shortcuts}>
 				{shortcuts.map((shortcut) => (
 					<a
@@ -94,6 +97,17 @@ const Main = () => {
 				</div>
 			</div>
 
+			<div className={classes.optionsButton}>
+				<Button
+					onClick={openOptionsPage}
+					size="small"
+					variant="contained"
+					color="primary"
+				>
+					<SettingsIcon className={classes.settingsIcon} />
+					Options
+				</Button>
+			</div>
 			<ContextMenu
 				openDialog={openDialog}
 				anchorEl={anchorEl}

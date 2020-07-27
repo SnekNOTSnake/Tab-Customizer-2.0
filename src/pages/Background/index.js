@@ -2,10 +2,14 @@
 import {
 	getInitBackgrounds,
 	getInitShortcuts,
+	chromeOptions,
 } from '../../assets/defaultValues';
 import { idbAction } from '../utils/helpers';
 
 chrome.runtime.onInstalled.addListener(() => {
+	// Set chrome options
+	chrome.storage.sync.set({ ...chromeOptions });
+
 	const openRequest = indexedDB.open('newTab2', 1);
 
 	openRequest.onsuccess = async () => {

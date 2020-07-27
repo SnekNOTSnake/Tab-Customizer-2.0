@@ -17,7 +17,7 @@ import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
 const Backgrounds = ({ match, setProgress }) => {
 	const [backgrounds, setBackgrounds] = React.useState([]);
 	const [totalBgs, setTotalBgs] = React.useState(0);
-	const [limit] = React.useState(9);
+	const [limit, setLimit] = React.useState(9);
 
 	// Force update
 	const [state, setState] = React.useState();
@@ -60,20 +60,24 @@ const Backgrounds = ({ match, setProgress }) => {
 	};
 
 	React.useEffect(() => {
-		setProgress(32);
-		let timeout = null;
-		// Paginate backgrounds
-		idbAction('backgrounds', 'getAll', null, {
-			page: match.params.page || 1,
-			limit,
-		}).then((bgs) => {
-			setBackgrounds(bgs.data);
-			setTotalBgs(bgs.allKeys.length);
-			setProgress(100);
-			timeout = setTimeout(() => setProgress(null), 500);
+		chrome.storage.sync.get({ itemsPerPage: 9 }, ({ itemsPerPage }) => {
+			setLimit(itemsPerPage);
+
+			setProgress(32);
+			let timeout = null;
+			// Paginate backgrounds
+			idbAction('backgrounds', 'getAll', null, {
+				page: match.params.page || 1,
+				limit: itemsPerPage,
+			}).then((bgs) => {
+				setBackgrounds(bgs.data);
+				setTotalBgs(bgs.allKeys.length);
+				setProgress(100);
+				timeout = setTimeout(() => setProgress(null), 500);
+			});
+			return () => clearTimeout(timeout);
 		});
-		return () => clearTimeout(timeout);
-	}, [limit, match.params.page, setProgress, state]);
+	}, [match.params.page, setProgress, state]);
 
 	const classes = useStyle();
 	return (

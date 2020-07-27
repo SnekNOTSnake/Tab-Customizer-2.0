@@ -9,6 +9,14 @@ export default makeStyles((theme) => ({
 		backgroundRepeat: 'no-repeat',
 		position: 'relative',
 	},
+	optionsButton: {
+		position: 'fixed',
+		bottom: '5%',
+		left: '5%',
+	},
+	settingsIcon: {
+		marginRight: theme.spacing(1),
+	},
 	shortcuts: {
 		position: 'absolute',
 		top: '50%',

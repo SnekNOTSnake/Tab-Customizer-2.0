@@ -97,7 +97,7 @@ const Options = () => {
 					<Route
 						exact
 						path={['/', '/options.html']}
-						render={() => <Redirect to="/wallpapers" />}
+						render={() => <Redirect to="/wallpaper-options" />}
 					/>
 					<Route
 						exact

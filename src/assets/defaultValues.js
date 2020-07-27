@@ -51,3 +51,6 @@ export const getInitShortcuts = () => {
 		{ name: 'Myanimelist', url: 'myanimelist.net', image: myanimelistIcon },
 	]);
 };
+export const chromeOptions = {
+	itemsPerPage: 9,
+};
