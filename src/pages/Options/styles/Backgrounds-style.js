@@ -17,10 +17,32 @@ export default makeStyles((theme) => ({
 		backgroundPosition: 'center',
 		backgroundRepeat: 'no-repeat',
 		backgroundSize: 'cover',
+		overflow: 'hidden',
+		'&:hover $itemMenu': {
+			transform: 'translateY(0)',
+		},
 	},
-	deleteButton: {
-		position: 'absolute !important',
-		bottom: 10,
-		right: 10,
+	itemMenu: {
+		position: 'absolute',
+		left: 0,
+		top: '70%',
+		bottom: '0',
+		width: '100%',
+		backgroundColor: 'rgba(0, 0, 0, 0.75)',
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+		transform: 'translateY(101%)',
+		transition: theme.transitions.create('transform', {
+			easing: theme.transitions.easing.easeOut,
+			duration: theme.transitions.duration.short,
+		}),
+	},
+	itemMenuButton: {
+		margin: `${theme.spacing(0, 0.5)} !important`,
+	},
+	workButton: {
+		backgroundColor: `${theme.palette.warning.main} !important`,
+		color: '#fff !important',
 	},
 }));

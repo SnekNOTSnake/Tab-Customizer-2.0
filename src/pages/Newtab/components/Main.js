@@ -112,7 +112,12 @@ const Main = () => {
 	return (
 		<div ref={root} className={classes.root}>
 			<div className={classes.shortcuts}>
-				<SortableList items={shortcuts} onSortEnd={onSortEnd} axis="xy" />
+				<SortableList
+					distance={1}
+					items={shortcuts}
+					onSortEnd={onSortEnd}
+					axis="xy"
+				/>
 				<div className={clsx(classes.shortcut, classes.addShortcut)}>
 					<Paper onClick={() => openDialog()} className={classes.icon}>
 						<AddIcon className={classes.addShortcutIcon} />

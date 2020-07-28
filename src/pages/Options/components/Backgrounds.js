@@ -1,8 +1,10 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import clsx from 'clsx';
 import { idbAction } from '../../utils/helpers';
 import useStyle from '../styles/Backgrounds-style';
 
+import Tooltip from '@material-ui/core/Tooltip';
 import Button from '@material-ui/core/Button';
 import Fab from '@material-ui/core/Fab';
 import Pagination from '@material-ui/lab/Pagination';
@@ -13,6 +15,8 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
+import WorkIcon from '@material-ui/icons/Work';
+import CheckIcon from '@material-ui/icons/Check';
 
 const Backgrounds = ({ match, setProgress }) => {
 	const [backgrounds, setBackgrounds] = React.useState([]);
@@ -102,16 +106,41 @@ const Backgrounds = ({ match, setProgress }) => {
 								backgroundImage: `url(${bg.image})`,
 							}}
 						>
-							<Button
-								color="secondary"
-								variant="contained"
-								className={classes.deleteButton}
-								type="button"
-								size="small"
-								onClick={() => deleteBackground(bg.key)}
-							>
-								<DeleteIcon />
-							</Button>
+							<div className={classes.itemMenu}>
+								<Tooltip title="Absolute Wallpaper" arrow>
+									<Button
+										color="primary"
+										variant="contained"
+										className={classes.itemMenuButton}
+										type="button"
+										size="small"
+									>
+										<CheckIcon />
+									</Button>
+								</Tooltip>
+								<Tooltip title="Tag as NSFW" arrow>
+									<Button
+										variant="contained"
+										className={clsx(classes.itemMenuButton, classes.workButton)}
+										type="button"
+										size="small"
+									>
+										<WorkIcon />
+									</Button>
+								</Tooltip>
+								<Tooltip title="Delete" arrow>
+									<Button
+										color="secondary"
+										variant="contained"
+										className={classes.itemMenuButton}
+										type="button"
+										size="small"
+										onClick={() => deleteBackground(bg.key)}
+									>
+										<DeleteIcon />
+									</Button>
+								</Tooltip>
+							</div>
 						</Paper>
 					</Grid>
 				))}
