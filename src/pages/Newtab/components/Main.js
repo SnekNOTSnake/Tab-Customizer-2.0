@@ -20,6 +20,38 @@ import AddIcon from '@material-ui/icons/AddRounded';
 // Loader element
 const loader = document.querySelector('.loader');
 
+// Sortable HOC
+const SortableItem = SortableElement(({ item, classes, openContext }) => (
+	<a
+		href={`https://${item.url}`}
+		index={item.key}
+		onContextMenu={openContext}
+		className={classes.shortcut}
+		key={item.key}
+	>
+		<Paper
+			style={{ backgroundImage: `url(${item.image})` }}
+			className={classes.icon}
+		/>
+		<div className={classes.text}>{item.name}</div>
+	</a>
+));
+const SortableList = SortableContainer(({ items, classes, openContext }) => {
+	return (
+		<div className="sortable">
+			{items.map((item, index) => (
+				<SortableItem
+					openContext={openContext}
+					classes={classes}
+					index={index}
+					item={item}
+					key={item.key}
+				/>
+			))}
+		</div>
+	);
+});
+
 const Main = () => {
 	const {
 		setShortcuts,
@@ -41,7 +73,8 @@ const Main = () => {
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const openContext = (e) => {
 		e.preventDefault();
-		setAnchorEl(e.currentTarget);
+		const target = e.currentTarget;
+		setAnchorEl(target);
 	};
 	const closeContext = () => setAnchorEl(null);
 
@@ -57,6 +90,7 @@ const Main = () => {
 		setOpen(false);
 	};
 
+	// Fetch The Background
 	const fetchBackground = React.useCallback(async () => {
 		if (bgKeys.length) {
 			// Load random image from DB
@@ -65,11 +99,11 @@ const Main = () => {
 			setBackground(bg.image);
 		}
 	}, [bgKeys]);
-
 	React.useEffect(() => {
 		fetchBackground();
 	}, [fetchBackground]);
 
+	// Preload the background
 	React.useEffect(() => {
 		const img = new Image();
 		img.src = background;
@@ -79,36 +113,12 @@ const Main = () => {
 		});
 	}, [background]);
 
-	const classes = useStyle({ defaultColor });
-
-	// Sortable HOC
+	// OnSortEnd
 	const onSortEnd = ({ oldIndex, newIndex }) => {
 		setShortcuts((initVal) => arrayMove(initVal, oldIndex, newIndex));
 	};
-	const SortableItem = SortableElement(({ item }) => (
-		<a
-			href={`https://${item.url}`}
-			index={item.key}
-			onContextMenu={openContext}
-			className={classes.shortcut}
-			key={item.key}
-		>
-			<Paper
-				style={{ backgroundImage: `url(${item.image})` }}
-				className={classes.icon}
-			/>
-			<div className={classes.text}>{item.name}</div>
-		</a>
-	));
-	const SortableList = SortableContainer(({ items }) => {
-		return (
-			<div className="sortable">
-				{items.map((item, index) => (
-					<SortableItem index={index} item={item} key={item.key} />
-				))}
-			</div>
-		);
-	});
+
+	const classes = useStyle({ defaultColor });
 	return (
 		<div ref={root} className={classes.root}>
 			<div className={classes.shortcuts}>
@@ -117,6 +127,8 @@ const Main = () => {
 					items={shortcuts}
 					onSortEnd={onSortEnd}
 					axis="xy"
+					classes={classes}
+					openContext={openContext}
 				/>
 				<div className={clsx(classes.shortcut, classes.addShortcut)}>
 					<Paper onClick={() => openDialog()} className={classes.icon}>
@@ -142,6 +154,7 @@ const Main = () => {
 				onClose={closeContext}
 			/>
 			<FormDialog
+				setShortcuts={setShortcuts}
 				editIndex={editIndex}
 				open={open}
 				onClose={closeDialog}

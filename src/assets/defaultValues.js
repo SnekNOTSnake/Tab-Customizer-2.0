@@ -12,7 +12,7 @@ import myanimelistIcon from './img/shortcuts/myanimelist.png';
 
 const promisify = (array) =>
 	Promise.all(
-		array.map((el) => {
+		array.map((el, i) => {
 			return new Promise((resolve, reject) => {
 				const xhr = new XMLHttpRequest();
 				xhr.responseType = 'blob';
@@ -20,12 +20,12 @@ const promisify = (array) =>
 				xhr.send();
 				xhr.onreadystatechange = () => {
 					if (xhr.readyState === 4 && xhr.status === 200) {
-						const reader = new FileReader();
-						reader.readAsArrayBuffer(xhr.response);
-						reader.onload = () => {
-							resolve({ ...el, image: reader.result });
-						};
-						reader.onerror = () => reject('Unable to read image');
+						resolve({
+							...el,
+							image: new File([xhr.response], `0${i + 1}.jpg`, {
+								type: 'image/jpeg',
+							}),
+						});
 					}
 				};
 				xhr.onerror = () => reject('Unable to load image');
@@ -35,12 +35,12 @@ const promisify = (array) =>
 
 export const getInitBackgrounds = () => {
 	return promisify([
-		{ image: img1 },
-		{ image: img2 },
-		{ image: img3 },
-		{ image: img4 },
-		{ image: img5 },
-		{ image: img6 },
+		{ image: img1, safe: true },
+		{ image: img2, safe: true },
+		{ image: img3, safe: false },
+		{ image: img4, safe: true },
+		{ image: img5, safe: false },
+		{ image: img6, safe: true },
 	]);
 };
 export const getInitShortcuts = () => {
@@ -53,4 +53,5 @@ export const getInitShortcuts = () => {
 };
 export const chromeOptions = {
 	itemsPerPage: 9,
+	showNsfw: false,
 };

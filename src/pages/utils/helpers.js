@@ -112,13 +112,9 @@ export const idbAction = (
 						throw new Error(
 							'A third argument of value is required to perform creation'
 						);
-					let image2 = value.image;
-					if (!options.noConversion) {
-						image2 = await readerFactory(value.image, 'readAsArrayBuffer');
-					}
 					tx = db.transaction(storeName, 'readwrite');
 					openedStore = tx.objectStore(storeName);
-					const createReq = openedStore.add({ ...value, image2 });
+					const createReq = openedStore.add(value);
 					createReq.onsuccess = () => resolve(createReq.result);
 					createReq.onerror = () => reject(createReq.error);
 					break;
@@ -137,16 +133,9 @@ export const idbAction = (
 
 				case 'updateOne':
 					if (!value) throw new Error('Third argument is required for this');
-					let image = value.image;
-					if (!options.noConversion) {
-						image = await readerFactory(value.data.image, 'readAsArrayBuffer');
-					}
 					tx = db.transaction(storeName, 'readwrite');
 					openedStore = tx.objectStore(storeName);
-					const updateReq = openedStore.put(
-						{ ...value.data, image },
-						Number(value.key)
-					);
+					const updateReq = openedStore.put(value.data, Number(value.key));
 					updateReq.onsuccess = () => resolve(value);
 					updateReq.onerror = () => reject('Unable to update');
 					break;

@@ -29,7 +29,8 @@ chrome.runtime.onInstalled.addListener(() => {
 	openRequest.onupgradeneeded = () => {
 		const db = openRequest.result;
 		db.createObjectStore('shortcuts', { autoIncrement: true });
-		db.createObjectStore('backgrounds', { autoIncrement: true });
+		const bgs = db.createObjectStore('backgrounds', { autoIncrement: true });
+		bgs.createIndex('safe_index', 'safe');
 	};
 
 	openRequest.onerror = () => {

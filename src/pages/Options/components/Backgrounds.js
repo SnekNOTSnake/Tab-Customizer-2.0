@@ -43,6 +43,7 @@ const Backgrounds = ({ match, setProgress }) => {
 			const result = await idbAction('backgrounds', 'createOne', {
 				image: file,
 				type: file.type,
+				safe: true,
 			});
 			if (result) {
 				console.log(`Added background ${file.name}`);

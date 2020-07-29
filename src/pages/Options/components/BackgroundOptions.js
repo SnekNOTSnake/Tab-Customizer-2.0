@@ -1,25 +1,38 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { withFormik } from 'formik';
+import * as Yup from 'yup';
 import useStyle from '../styles/BackgroundOptions-style';
 import { chromeOptions } from '../../../assets/defaultValues';
 
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 
+// Small Alert Component
 const Alert = (props) => <MuiAlert elevation={6} variant="filled" {...props} />;
 
-const BackgroundOptions = ({ setProgress }) => {
-	const { setValue, register, handleSubmit, errors } = useForm();
+const BackgroundOptions = (props) => {
+	const {
+		setProgress,
+		snackbarIsOpen,
+		setSnackbarIsOpen,
+		values,
+		errors,
+		touched,
+		handleChange,
+		handleBlur,
+		handleSubmit,
+		setFieldValue,
+	} = props;
 
 	// Snackbar
-	const [open, setOpen] = React.useState(false);
-	const openSnackbar = () => setOpen(true);
-	const closeSnackbar = () => setOpen(false);
+	const closeSnackbar = () => setSnackbarIsOpen(false);
 
 	// Progress Effect
 	React.useEffect(() => {
@@ -30,45 +43,51 @@ const BackgroundOptions = ({ setProgress }) => {
 
 	// Fetch Options Effect
 	React.useEffect(() => {
-		chrome.storage.sync.get({ itemsPerPage: 9 }, ({ itemsPerPage }) =>
-			setValue('itemsPerPage', itemsPerPage)
+		chrome.storage.sync.get(
+			{ itemsPerPage: 9, showNsfw: false },
+			({ itemsPerPage, showNsfw }) => {
+				setFieldValue('itemsPerPage', itemsPerPage);
+				setFieldValue('showNsfw', showNsfw);
+			}
 		);
-	}, [setValue]);
+	}, [setFieldValue]);
 
-	const onSubmitHandler = async ({ itemsPerPage }) => {
-		chrome.storage.sync.set({ itemsPerPage }, openSnackbar);
-	};
-	const onResetHandler = () => {
-		setValue('itemsPerPage', chromeOptions.itemsPerPage);
+	// Reset Form
+	const handleReset = () => {
+		setFieldValue('itemsPerPage', chromeOptions.itemsPerPage);
+		setFieldValue('showNsfw', chromeOptions.showNsfw);
 	};
 
 	const classes = useStyle();
 	return (
 		<Container fixed>
 			<Typography variant="h4">Wallpaper Options</Typography>
-			<form onSubmit={handleSubmit(onSubmitHandler)}>
+			<form onSubmit={handleSubmit}>
 				<FormGroup className={classes.formGroup}>
 					<TextField
-						error={Boolean(errors.itemsPerPage)}
+						error={touched.itemsPerPage && errors.itemsPerPage}
 						name="itemsPerPage"
 						type="number"
-						inputRef={register({ required: true, max: 100, min: 1 })}
 						variant="outlined"
 						label="Wallpaper items per page"
-						helperText={(() => {
-							if (errors.itemsPerPage) {
-								switch (errors.itemsPerPage.type) {
-									case 'required':
-										return 'Items is required';
-									case 'max':
-										return 'Items must be between 10 and 100';
-									case 'min':
-										return 'Items must be between 10 and 100';
-									default:
-										break;
-								}
-							}
-						})()}
+						helperText={errors.itemsPerPage}
+						onChange={handleChange}
+						onBlur={handleBlur}
+						value={values.itemsPerPage}
+					/>
+				</FormGroup>
+				<FormGroup className={classes.formGroup}>
+					<FormControlLabel
+						control={
+							<Switch
+								onChange={handleChange}
+								onBlur={handleBlur}
+								name="showNsfw"
+								checked={values.showNsfw}
+								value={values.showNsfw}
+							/>
+						}
+						label="Show NSFW"
 					/>
 				</FormGroup>
 				<Button
@@ -80,7 +99,7 @@ const BackgroundOptions = ({ setProgress }) => {
 					Save
 				</Button>
 				<Button
-					onClick={onResetHandler}
+					onClick={handleReset}
 					color="secondary"
 					variant="contained"
 					type="button"
@@ -92,7 +111,7 @@ const BackgroundOptions = ({ setProgress }) => {
 			<Snackbar
 				anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
 				autoHideDuration={4000}
-				open={open}
+				open={snackbarIsOpen}
 				onClose={closeSnackbar}
 			>
 				<Alert className={classes.snackbarAlert} severity="success">
@@ -103,4 +122,26 @@ const BackgroundOptions = ({ setProgress }) => {
 	);
 };
 
-export default BackgroundOptions;
+const EnhancedForm = withFormik({
+	mapPropsToValues: (props) => ({ itemsPerPage: 9, showNsfw: false }),
+
+	// Validation
+	validationSchema: Yup.object().shape({
+		itemsPerPage: Yup.number()
+			.required('Items per page is required')
+			.max(99, 'Max 99')
+			.min(1, 'Min 1'),
+		showNsfw: Yup.boolean().required('Show NSFW should be boolean'),
+	}),
+
+	// Submission
+	handleSubmit: (values, { props, setSubmitting }) => {
+		const { setSnackbarIsOpen } = props;
+		const openSnackbar = () => setSnackbarIsOpen(true);
+
+		chrome.storage.sync.set(values, openSnackbar);
+		setSubmitting(false);
+	},
+});
+
+export default EnhancedForm(BackgroundOptions);

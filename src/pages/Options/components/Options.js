@@ -20,8 +20,12 @@ import SettingsIcon from '@material-ui/icons/Settings';
 const loader = document.querySelector('.loader');
 
 const Options = () => {
-	const [open, setOpen] = React.useState(true);
-	const toggleDrawer = () => setOpen((initVal) => !initVal);
+	// Snackbar
+	const [snackbarIsOpen, setSnackbarIsOpen] = React.useState(false);
+
+	// Drawer
+	const [drawerIsOpen, setDrawerIsOpen] = React.useState(true);
+	const toggleDrawer = () => setDrawerIsOpen((initVal) => !initVal);
 	const [progress, setProgress] = React.useState(4);
 
 	React.useEffect(() => {
@@ -34,11 +38,11 @@ const Options = () => {
 			<Drawer
 				variant="permanent"
 				className={clsx(classes.drawer, {
-					[classes.drawerClose]: !open,
+					[classes.drawerClose]: !drawerIsOpen,
 				})}
 				classes={{
 					paper: clsx(classes.drawer, {
-						[classes.drawerClose]: !open,
+						[classes.drawerClose]: !drawerIsOpen,
 					}),
 				}}
 			>
@@ -83,7 +87,7 @@ const Options = () => {
 			</Drawer>
 			<main
 				className={clsx(classes.main, {
-					[classes.mainClose]: !open,
+					[classes.mainClose]: !drawerIsOpen,
 				})}
 			>
 				<LinearProgress
@@ -109,7 +113,13 @@ const Options = () => {
 					<Route
 						exact
 						path="/wallpaper-options"
-						render={() => <BackgroundOptions setProgress={setProgress} />}
+						render={() => (
+							<BackgroundOptions
+								setSnackbarIsOpen={setSnackbarIsOpen}
+								snackbarIsOpen={snackbarIsOpen}
+								setProgress={setProgress}
+							/>
+						)}
 					/>
 					<Route render={() => <NotFound />} />
 				</Switch>

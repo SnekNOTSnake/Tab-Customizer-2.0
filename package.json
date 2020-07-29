@@ -20,12 +20,13 @@
 		"@types/chrome": "0.0.104",
 		"@types/react": "^16.9.26",
 		"clsx": "^1.1.1",
+		"formik": "^2.1.5",
 		"react": "^16.13.1",
 		"react-dom": "^16.13.1",
-		"react-hook-form": "^6.1.0",
 		"react-hot-loader": "^4.12.20",
 		"react-router-dom": "^5.2.0",
-		"react-sortable-hoc": "^1.11.0"
+		"react-sortable-hoc": "^1.11.0",
+		"yup": "^0.29.2"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.9.0",
