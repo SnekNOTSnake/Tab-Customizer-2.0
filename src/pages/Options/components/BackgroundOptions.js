@@ -140,6 +140,7 @@ const EnhancedForm = withFormik({
 		const openSnackbar = () => setSnackbarIsOpen(true);
 
 		chrome.storage.sync.set(values, openSnackbar);
+		chrome.browserAction.setBadgeText({ text: values.showNsfw ? 'ON' : '' });
 		setSubmitting(false);
 	},
 });

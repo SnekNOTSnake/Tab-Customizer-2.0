@@ -1,4 +1,5 @@
 import React from 'react';
+import cloneDeep from 'lodash.clonedeep';
 import { withFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -191,7 +192,7 @@ const EnhancedForm = withFormik({
 
 			if (result)
 				setShortcuts((initVal) => {
-					const newShortcuts = JSON.parse(JSON.stringify(initVal));
+					const newShortcuts = cloneDeep(initVal);
 					const alteredIdx = newShortcuts.findIndex((sc) => {
 						return sc.key === editIndex;
 					});

@@ -8,20 +8,27 @@ import { idbAction } from '../../utils/helpers';
 const Newtab = () => {
 	const [backgrounds, setBackgrounds] = React.useState([]);
 	const [shortcuts, setShortcuts] = React.useState([]);
+	const [options, setOptions] = React.useState({ showNsfw: true });
 
 	React.useEffect(() => {
-		const openRequest = indexedDB.open('newTab2');
-		openRequest.onupgradeneeded = () => alert('Please re-install extension');
-		openRequest.onsuccess = async () => {
-			// Shortcuts
-			const shortcuts = await idbAction('shortcuts', 'getAll');
-			setShortcuts(shortcuts.data);
+		chrome.storage.sync.get({ showNsfw: true }, ({ showNsfw }) => {
+			setOptions({ showNsfw });
 
-			// Backgrounds
-			const backgrounds = await idbAction('backgrounds', 'getAllKeys');
-			setBackgrounds(backgrounds);
-		};
-		openRequest.onerror = () => console.error(openRequest.error);
+			const openRequest = indexedDB.open('newTab2');
+			openRequest.onupgradeneeded = () => alert('Please re-install extension');
+			openRequest.onsuccess = async () => {
+				// Shortcuts
+				const shortcuts = await idbAction('shortcuts', 'getAll');
+				setShortcuts(shortcuts.data);
+
+				// Backgrounds
+				const backgrounds = await idbAction('backgrounds', 'getAllKeys', null, {
+					showNsfw,
+				});
+				setBackgrounds(backgrounds);
+			};
+			openRequest.onerror = () => console.error(openRequest.error);
+		});
 	}, []);
 
 	const defaultColor = '#aaa';
@@ -32,8 +39,10 @@ const Newtab = () => {
 				defaultColor,
 				shortcuts,
 				backgrounds,
+				options,
 				setBackgrounds,
 				setShortcuts,
+				setOptions,
 			}}
 		>
 			<div className={classes.root}>

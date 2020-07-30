@@ -1,3 +1,5 @@
+import cloneDeep from 'lodash.clonedeep';
+
 export const readerFactory = (valueToRead, operation) => {
 	const promise = new Promise((resolve, reject) => {
 		const reader = new FileReader();
@@ -25,7 +27,7 @@ export const idbAction = (
 	storeName,
 	actionName,
 	value = '',
-	options = { noConversion: false, page: 1, limit: 21 }
+	options = { noConversion: false, page: 1, limit: 21, showNsfw: true }
 ) => {
 	const promise = new Promise((resolve, reject) => {
 		const openReq = indexedDB.open('newTab2');
@@ -53,7 +55,13 @@ export const idbAction = (
 				case 'getAllKeys':
 					tx = db.transaction(storeName, 'readonly');
 					openedStore = tx.objectStore(storeName);
-					const keysReq = openedStore.getAllKeys();
+					let keysReq;
+					if (options.showNsfw) {
+						keysReq = openedStore.getAllKeys();
+					} else {
+						const indexStore = openedStore.index('safe_index');
+						keysReq = indexStore.getAllKeys(1);
+					}
 					keysReq.onsuccess = () => {
 						resolve(keysReq.result);
 					};
@@ -135,9 +143,18 @@ export const idbAction = (
 					if (!value) throw new Error('Third argument is required for this');
 					tx = db.transaction(storeName, 'readwrite');
 					openedStore = tx.objectStore(storeName);
-					const updateReq = openedStore.put(value.data, Number(value.key));
-					updateReq.onsuccess = () => resolve(value);
-					updateReq.onerror = () => reject('Unable to update');
+					const getReq = openedStore.get(Number(value.key));
+					getReq.onsuccess = () => {
+						const prevData = cloneDeep(getReq.result);
+						delete prevData.primaryKey;
+						const updateReq = openedStore.put(
+							{ ...prevData, ...value.data },
+							Number(value.key)
+						);
+						updateReq.onsuccess = () => resolve(value);
+						updateReq.onerror = () => reject('Unable to update');
+					};
+					getReq.onerror = () => reject('Unable to update');
 					break;
 
 				default:

@@ -16,6 +16,7 @@ import Container from '@material-ui/core/Container';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
 import WorkIcon from '@material-ui/icons/Work';
+import WorkOutlineIcon from '@material-ui/icons/WorkOutline';
 import CheckIcon from '@material-ui/icons/Check';
 
 const Backgrounds = ({ match, setProgress }) => {
@@ -43,7 +44,7 @@ const Backgrounds = ({ match, setProgress }) => {
 			const result = await idbAction('backgrounds', 'createOne', {
 				image: file,
 				type: file.type,
-				safe: true,
+				safe: 1,
 			});
 			if (result) {
 				console.log(`Added background ${file.name}`);
@@ -55,11 +56,21 @@ const Backgrounds = ({ match, setProgress }) => {
 		});
 	};
 
-	// Delete Image
+	// BackgroundActions
 	const deleteBackground = async (key) => {
 		const result = await idbAction('backgrounds', 'deleteOne', key);
 		if (result) {
 			console.log(`Deleted ${result}`);
+			forceUpdate();
+		}
+	};
+	const tagNsfwBackground = async (key, safe) => {
+		const result = await idbAction('backgrounds', 'updateOne', {
+			data: { safe: Number(safe) },
+			key,
+		});
+		if (result) {
+			console.log(`Updated ${key}`);
 			forceUpdate();
 		}
 	};
@@ -107,6 +118,11 @@ const Backgrounds = ({ match, setProgress }) => {
 								backgroundImage: `url(${bg.image})`,
 							}}
 						>
+							{Boolean(!bg.safe) && (
+								<Tooltip title="Tagged as NSFW" arrow>
+									<div className={classes.nsfw}>N</div>
+								</Tooltip>
+							)}
 							<div className={classes.itemMenu}>
 								<Tooltip title="Absolute Wallpaper" arrow>
 									<Button
@@ -119,14 +135,15 @@ const Backgrounds = ({ match, setProgress }) => {
 										<CheckIcon />
 									</Button>
 								</Tooltip>
-								<Tooltip title="Tag as NSFW" arrow>
+								<Tooltip title={bg.safe ? 'Tag as NSFW' : 'Tag as SFW'} arrow>
 									<Button
 										variant="contained"
+										onClick={() => tagNsfwBackground(bg.key, !bg.safe)}
 										className={clsx(classes.itemMenuButton, classes.workButton)}
 										type="button"
 										size="small"
 									>
-										<WorkIcon />
+										{bg.safe ? <WorkIcon /> : <WorkOutlineIcon />}
 									</Button>
 								</Tooltip>
 								<Tooltip title="Delete" arrow>

@@ -35,12 +35,12 @@ const promisify = (array) =>
 
 export const getInitBackgrounds = () => {
 	return promisify([
-		{ image: img1, safe: true },
-		{ image: img2, safe: true },
-		{ image: img3, safe: false },
-		{ image: img4, safe: true },
-		{ image: img5, safe: false },
-		{ image: img6, safe: true },
+		{ image: img1, safe: 1 },
+		{ image: img2, safe: 1 },
+		{ image: img3, safe: 0 },
+		{ image: img4, safe: 1 },
+		{ image: img5, safe: 0 },
+		{ image: img6, safe: 1 },
 	]);
 };
 export const getInitShortcuts = () => {

@@ -14,6 +14,15 @@
 	"chrome_url_overrides": {
 		"newtab": "newtab.html"
 	},
+	"commands": {
+		"toggle_nsfw": {
+			"suggested_key": {
+				"default": "Shift+Alt+N"
+			},
+			"description": "Toggle NSFW Backgrounds",
+			"global": true
+		}
+	},
 	"icons": {
 		"128": "icon-128.png"
 	},

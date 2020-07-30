@@ -6,9 +6,28 @@ import {
 } from '../../assets/defaultValues';
 import { idbAction } from '../utils/helpers';
 
+// OnCommand
+chrome.commands.onCommand.addListener((command) => {
+	switch (command) {
+		case 'toggle_nsfw':
+			chrome.storage.sync.get({ showNsfw: false }, ({ showNsfw }) => {
+				chrome.storage.sync.set({ showNsfw: !showNsfw }, () => {
+					chrome.browserAction.setBadgeText({ text: !showNsfw ? 'ON' : '' });
+				});
+			});
+			break;
+		default:
+			break;
+	}
+});
+
+// OnInstall
 chrome.runtime.onInstalled.addListener(() => {
 	// Set chrome options
 	chrome.storage.sync.set({ ...chromeOptions });
+	chrome.browserAction.setBadgeText({
+		text: chromeOptions.showNsfw ? 'ON' : '',
+	});
 
 	const openRequest = indexedDB.open('newTab2', 1);
 

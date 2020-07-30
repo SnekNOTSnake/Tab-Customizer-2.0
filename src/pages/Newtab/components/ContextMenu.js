@@ -1,4 +1,5 @@
 import React from 'react';
+import cloneDeep from 'lodash.clonedeep';
 
 import DataContext from '../dataContext';
 import { idbAction } from '../../utils/helpers';
@@ -24,7 +25,7 @@ const ContextMenu = ({ anchorEl, onClose, openDialog }) => {
 	const deleteHandler = () => {
 		const index = anchorEl.attributes.index.value;
 		setShortcuts((initVal) => {
-			const newShortcuts = JSON.parse(JSON.stringify(initVal));
+			const newShortcuts = cloneDeep(initVal);
 			idbAction('shortcuts', 'deleteOne', Number(index));
 			return newShortcuts.filter((el) => el.key !== Number(index));
 		});
