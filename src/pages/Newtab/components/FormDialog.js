@@ -72,7 +72,7 @@ const FormDialog = (props) => {
 			resetForm();
 			setImage('');
 		}, 225);
-		onClose(false);
+		onClose();
 	};
 
 	// File Input Handling
@@ -126,7 +126,7 @@ const FormDialog = (props) => {
 						onBlur={handleBlur}
 						error={errors.url && touched.url}
 					/>
-					{image && <RenderImage />}
+					{values.files && <RenderImage />}
 					<Button
 						className={classes.addFileButton}
 						component="label"
@@ -177,7 +177,7 @@ const EnhancedForm = withFormik({
 	}),
 
 	// Handle Submit
-	handleSubmit: async ({ name, url, files }, { props, setSubmitting }) => {
+	handleSubmit: async ({ name, url, files }, { props, resetForm }) => {
 		const { editIndex, setShortcuts, onClose } = props;
 
 		// Edit and Add Form Confirm
@@ -215,6 +215,9 @@ const EnhancedForm = withFormik({
 				{ ...newSc, image: imageURL, key: newScId },
 			]);
 		}
+		setTimeout(() => {
+			resetForm();
+		}, 250);
 		onClose();
 	},
 });

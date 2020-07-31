@@ -23,7 +23,7 @@ const loader = document.querySelector('.loader');
 // Sortable HOC
 const SortableItem = SortableElement(({ item, classes, openContext }) => (
 	<a
-		href={`https://${item.url}`}
+		href={item.url}
 		index={item.key}
 		onContextMenu={openContext}
 		className={classes.shortcut}
@@ -85,7 +85,7 @@ const Main = () => {
 		setOpen(true);
 		if (Boolean(editIndex)) setEditIndex(editIndex);
 	};
-	const closeDialog = (val) => {
+	const closeDialog = () => {
 		setEditIndex(null);
 		setOpen(false);
 	};

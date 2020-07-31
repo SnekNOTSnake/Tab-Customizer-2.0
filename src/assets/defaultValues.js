@@ -45,10 +45,18 @@ export const getInitBackgrounds = () => {
 };
 export const getInitShortcuts = () => {
 	return promisify([
-		{ name: 'Alphacoders', url: 'wall.alphacoders.com', image: alphaIcon },
-		{ name: 'Pixiv', url: 'pixiv.net', image: pixivIcon },
-		{ name: 'Mangadex', url: 'mangadex.org', image: mangadexIcon },
-		{ name: 'Myanimelist', url: 'myanimelist.net', image: myanimelistIcon },
+		{
+			name: 'Alphacoders',
+			url: 'https://wall.alphacoders.com',
+			image: alphaIcon,
+		},
+		{ name: 'Pixiv', url: 'https://pixiv.net', image: pixivIcon },
+		{ name: 'Mangadex', url: 'https://mangadex.org', image: mangadexIcon },
+		{
+			name: 'Myanimelist',
+			url: 'https://myanimelist.net',
+			image: myanimelistIcon,
+		},
 	]);
 };
 export const chromeOptions = {
