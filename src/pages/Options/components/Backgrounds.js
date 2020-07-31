@@ -1,28 +1,36 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import clsx from 'clsx';
 import { idbAction } from '../../utils/helpers';
 import useStyle from '../styles/Backgrounds-style';
+import Background from './Background';
 
-import Tooltip from '@material-ui/core/Tooltip';
-import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import Card from '@material-ui/core/Card';
+import CardMedia from '@material-ui/core/CardMedia';
+import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
 import Pagination from '@material-ui/lab/Pagination';
 import PaginationItem from '@material-ui/lab/PaginationItem';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import DeleteIcon from '@material-ui/icons/Delete';
 import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
-import WorkIcon from '@material-ui/icons/Work';
-import WorkOutlineIcon from '@material-ui/icons/WorkOutline';
-import CheckIcon from '@material-ui/icons/Check';
 
 const Backgrounds = ({ match, setProgress }) => {
 	const [backgrounds, setBackgrounds] = React.useState([]);
 	const [totalBgs, setTotalBgs] = React.useState(0);
 	const [limit, setLimit] = React.useState(9);
+
+	// Preview
+	const [previewIsOpen, setPreviewIsOpen] = React.useState(false);
+	const [imagePreview, setImagePreview] = React.useState('');
+	const openPreview = (bg) => {
+		setImagePreview(bg.image);
+		setPreviewIsOpen(true);
+	};
+	const closePreview = () => {
+		setPreviewIsOpen(false);
+		setTimeout(() => setImagePreview(''), 250);
+	};
 
 	// Force update
 	const [state, setState] = React.useState();
@@ -56,25 +64,6 @@ const Backgrounds = ({ match, setProgress }) => {
 		});
 	};
 
-	// BackgroundActions
-	const deleteBackground = async (key) => {
-		const result = await idbAction('backgrounds', 'deleteOne', key);
-		if (result) {
-			console.log(`Deleted ${result}`);
-			forceUpdate();
-		}
-	};
-	const tagNsfwBackground = async (key, safe) => {
-		const result = await idbAction('backgrounds', 'updateOne', {
-			data: { safe: Number(safe) },
-			key,
-		});
-		if (result) {
-			console.log(`Updated ${key}`);
-			forceUpdate();
-		}
-	};
-
 	React.useEffect(() => {
 		chrome.storage.sync.get({ itemsPerPage: 9 }, ({ itemsPerPage }) => {
 			setLimit(itemsPerPage);
@@ -95,7 +84,7 @@ const Backgrounds = ({ match, setProgress }) => {
 		});
 	}, [match.params.page, setProgress, state]);
 
-	const classes = useStyle();
+	const classes = useStyle({ bg: imagePreview });
 	return (
 		<Container className="Backgrounds" fixed>
 			<Fab component="label" className={classes.fab} color="primary">
@@ -111,56 +100,12 @@ const Backgrounds = ({ match, setProgress }) => {
 			<Typography variant="h4">Wallpapers</Typography>
 			<Grid className={classes.items} container spacing={1}>
 				{backgrounds.map((bg) => (
-					<Grid item sm={12} md={6} lg={4} xl={3} key={bg.key}>
-						<Paper
-							className={classes.item}
-							style={{
-								backgroundImage: `url(${bg.image})`,
-							}}
-						>
-							{Boolean(!bg.safe) && (
-								<Tooltip title="Tagged as NSFW" arrow>
-									<div className={classes.nsfw}>N</div>
-								</Tooltip>
-							)}
-							<div className={classes.itemMenu}>
-								<Tooltip title="Absolute Wallpaper" arrow>
-									<Button
-										color="primary"
-										variant="contained"
-										className={classes.itemMenuButton}
-										type="button"
-										size="small"
-									>
-										<CheckIcon />
-									</Button>
-								</Tooltip>
-								<Tooltip title={bg.safe ? 'Tag as NSFW' : 'Tag as SFW'} arrow>
-									<Button
-										variant="contained"
-										onClick={() => tagNsfwBackground(bg.key, !bg.safe)}
-										className={clsx(classes.itemMenuButton, classes.workButton)}
-										type="button"
-										size="small"
-									>
-										{bg.safe ? <WorkIcon /> : <WorkOutlineIcon />}
-									</Button>
-								</Tooltip>
-								<Tooltip title="Delete" arrow>
-									<Button
-										color="secondary"
-										variant="contained"
-										className={classes.itemMenuButton}
-										type="button"
-										size="small"
-										onClick={() => deleteBackground(bg.key)}
-									>
-										<DeleteIcon />
-									</Button>
-								</Tooltip>
-							</div>
-						</Paper>
-					</Grid>
+					<Background
+						key={bg.key}
+						openPreview={openPreview}
+						forceUpdate={forceUpdate}
+						bg={bg}
+					/>
 				))}
 			</Grid>
 			<div className="pagination">
@@ -177,6 +122,20 @@ const Backgrounds = ({ match, setProgress }) => {
 					)}
 				/>
 			</div>
+
+			<Dialog
+				onClose={closePreview}
+				open={previewIsOpen}
+				maxWidth="lg"
+				classes={{
+					paper: classes.dialogPaper,
+				}}
+			>
+				<div
+					style={{ backgroundImage: `url(${imagePreview})` }}
+					className={classes.previewImage}
+				/>
+			</Dialog>
 		</Container>
 	);
 };
