@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import Backgrounds from './Backgrounds';
 import BackgroundOptions from './BackgroundOptions';
 import NotFound from './NotFound';
+import About from './About';
 import useStyle from '../styles/Options-style.js';
 
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -16,6 +17,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import WallpaperIcon from '@material-ui/icons/Wallpaper';
 import SettingsIcon from '@material-ui/icons/Settings';
+import InfoIcon from '@material-ui/icons/Info';
 
 const loader = document.querySelector('.loader');
 
@@ -47,7 +49,11 @@ const Options = () => {
 				}}
 			>
 				<div className={classes.drawerToolbar}>
-					<ListItem button onClick={toggleDrawer}>
+					<ListItem
+						className={classes.whiteHover}
+						button
+						onClick={toggleDrawer}
+					>
 						<ListItemIcon>
 							<ChevronRightIcon className={classes.icon} />
 						</ListItemIcon>
@@ -64,7 +70,7 @@ const Options = () => {
 								location.pathname
 							);
 						}}
-						className={classes.link}
+						className={clsx(classes.link, classes.whiteHover)}
 					>
 						<ListItemIcon>
 							<WallpaperIcon className={classes.icon} />
@@ -76,12 +82,24 @@ const Options = () => {
 						to="/wallpaper-options"
 						component={NavLink}
 						button
-						className={classes.link}
+						className={clsx(classes.link, classes.whiteHover)}
 					>
 						<ListItemIcon>
 							<SettingsIcon className={classes.icon} />
 						</ListItemIcon>
 						<ListItemText>Wallpaper Options</ListItemText>
+					</ListItem>
+					<ListItem
+						exact
+						to="/about"
+						component={NavLink}
+						button
+						className={clsx(classes.link, classes.whiteHover)}
+					>
+						<ListItemIcon>
+							<InfoIcon className={classes.icon} />
+						</ListItemIcon>
+						<ListItemText>About</ListItemText>
 					</ListItem>
 				</List>
 			</Drawer>
@@ -121,6 +139,7 @@ const Options = () => {
 							/>
 						)}
 					/>
+					<Route exact path="/about" render={() => <About />} />
 					<Route render={() => <NotFound />} />
 				</Switch>
 			</main>

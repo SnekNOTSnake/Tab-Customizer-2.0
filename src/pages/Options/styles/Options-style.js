@@ -4,6 +4,11 @@ const drawerWidth = 240;
 const linkBorder = 4;
 
 export default makeStyles((theme) => ({
+	'@global': {
+		h4: {
+			marginBottom: `${theme.spacing(2)}px !important`,
+		},
+	},
 	root: {
 		minHeight: '100vh',
 		backgroundColor: '#fff',
@@ -19,17 +24,17 @@ export default makeStyles((theme) => ({
 			easing: theme.transitions.easing.easeOut,
 			duration: theme.transitions.duration.short,
 		}),
-		backgroundColor: '#4C5A69',
+		backgroundColor: '#393e46',
 		color: '#fff',
 	},
 	drawerClose: {
-		width: theme.spacing(7),
+		width: theme.spacing(7) + linkBorder,
 	},
 	drawerToolbar: {
 		display: 'flex',
 		justifyContent: 'flex-end',
 		padding: theme.spacing(2, 0),
-		backgroundColor: '#2C3A49',
+		backgroundColor: '#222831',
 	},
 	link: {
 		paddingLeft: `${16 + linkBorder}px !important`,
@@ -51,6 +56,11 @@ export default makeStyles((theme) => ({
 			backgroundColor: 'rgba(255, 255, 255, 1)',
 		},
 	},
+	whiteHover: {
+		'&:hover': {
+			backgroundColor: 'rgba(255, 255, 255, 0.075) !important',
+		},
+	},
 	main: {
 		marginLeft: drawerWidth,
 		padding: theme.spacing(5, 0),
@@ -61,7 +71,7 @@ export default makeStyles((theme) => ({
 		position: 'relative',
 	},
 	mainClose: {
-		marginLeft: theme.spacing(7),
+		marginLeft: theme.spacing(7) + linkBorder,
 	},
 	progress: {
 		position: 'absolute !important',
