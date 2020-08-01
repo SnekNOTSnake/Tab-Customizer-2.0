@@ -9,14 +9,4 @@ export default makeStyles((theme) => ({
 	items: {
 		margin: `${theme.spacing(2, 0)} !important`,
 	},
-	dialogPaper: {
-		width: '100% !important',
-	},
-	previewImage: {
-		width: '100%',
-		paddingBottom: '56.25%',
-		backgroundPosition: 'top',
-		backgroundSize: 'cover',
-		backgroundRepeat: 'no-repeat',
-	},
 }));

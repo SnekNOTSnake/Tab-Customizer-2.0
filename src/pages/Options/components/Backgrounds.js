@@ -1,10 +1,10 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { idbAction } from '../../utils/helpers';
+import { idbAction, readerFactory, FileWithURL } from '../../utils/helpers';
 import useStyle from '../styles/Backgrounds-style';
 import Background from './Background';
+import BackgroundPreview from './BackgroundPreview';
 
-import Dialog from '@material-ui/core/Dialog';
 import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
 import Pagination from '@material-ui/lab/Pagination';
@@ -22,7 +22,7 @@ const Backgrounds = ({ match, setProgress }) => {
 	const [previewIsOpen, setPreviewIsOpen] = React.useState(false);
 	const [imagePreview, setImagePreview] = React.useState('');
 	const openPreview = (bg) => {
-		setImagePreview(bg.image);
+		setImagePreview(bg);
 		setPreviewIsOpen(true);
 	};
 	const closePreview = () => {
@@ -35,6 +35,7 @@ const Backgrounds = ({ match, setProgress }) => {
 	const forceUpdate = () => setState({});
 
 	// Add Image
+	const inputRef = React.useRef(null);
 	const onChangeHandler = (e) => {
 		const { files } = e.target;
 		if (!files.length) return;
@@ -49,7 +50,6 @@ const Backgrounds = ({ match, setProgress }) => {
 		filtered.forEach(async (file, i) => {
 			const result = await idbAction('backgrounds', 'createOne', {
 				image: file,
-				type: file.type,
 				safe: 1,
 			});
 			if (result) {
@@ -60,6 +60,7 @@ const Backgrounds = ({ match, setProgress }) => {
 				if (filtered.length === i + 1 && update) forceUpdate();
 			} else console.log(`Unable to add background ${file.name}`);
 		});
+		inputRef.current.value = null;
 	};
 
 	React.useEffect(() => {
@@ -72,8 +73,15 @@ const Backgrounds = ({ match, setProgress }) => {
 			idbAction('backgrounds', 'getAll', null, {
 				page: match.params.page || 1,
 				limit: itemsPerPage,
-			}).then((bgs) => {
-				setBackgrounds(bgs.data);
+				noConversion: true,
+			}).then(async (bgs) => {
+				const bgsData = await Promise.all(
+					bgs.data.map(async (bg) => {
+						const imgURL = await readerFactory(bg.image, 'readAsDataURL');
+						return new FileWithURL(bg.image, imgURL, bg);
+					})
+				);
+				setBackgrounds(bgsData);
 				setTotalBgs(bgs.allKeys.length);
 				setProgress(100);
 				timeout = setTimeout(() => setProgress(null), 500);
@@ -82,12 +90,13 @@ const Backgrounds = ({ match, setProgress }) => {
 		});
 	}, [match.params.page, setProgress, state]);
 
-	const classes = useStyle({ bg: imagePreview });
+	const classes = useStyle();
 	return (
 		<Container className="Backgrounds" fixed>
 			<Fab component="label" className={classes.fab} color="primary">
 				<AddPhotoAlternateIcon />
 				<input
+					ref={inputRef}
 					onChange={onChangeHandler}
 					style={{ display: 'none' }}
 					multiple
@@ -121,19 +130,12 @@ const Backgrounds = ({ match, setProgress }) => {
 				/>
 			</div>
 
-			<Dialog
-				onClose={closePreview}
-				open={previewIsOpen}
-				maxWidth="lg"
-				classes={{
-					paper: classes.dialogPaper,
-				}}
-			>
-				<div
-					style={{ backgroundImage: `url(${imagePreview})` }}
-					className={classes.previewImage}
-				/>
-			</Dialog>
+			<BackgroundPreview
+				previewIsOpen={previewIsOpen}
+				closePreview={closePreview}
+				imagePreview={imagePreview}
+				forceUpdate={forceUpdate}
+			/>
 		</Container>
 	);
 };

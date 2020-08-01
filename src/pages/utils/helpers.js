@@ -26,7 +26,7 @@ export const readerFactory = (valueToRead, operation) => {
 export const idbAction = (
 	storeName,
 	actionName,
-	value = '',
+	value = null,
 	options = { noConversion: false, page: 1, limit: 21, showNsfw: true }
 ) => {
 	const promise = new Promise((resolve, reject) => {
@@ -72,6 +72,7 @@ export const idbAction = (
 					tx = db.transaction(storeName, 'readonly');
 					openedStore = tx.objectStore(storeName);
 					let index = 0;
+					// The allKeys is for pagination menu
 					const keysReq2 = openedStore.getAllKeys();
 					keysReq2.onsuccess = () => {
 						const allDataReq = openedStore.openCursor();
@@ -94,7 +95,12 @@ export const idbAction = (
 									index++;
 									cursor.continue();
 								} else {
-									if (options.noConversion) return resolve(dataContainer);
+									if (options.noConversion) {
+										return resolve({
+											data: dataContainer,
+											allKeys: keysReq2.result,
+										});
+									}
 									const data = await Promise.all(
 										dataContainer.map(async (el) => {
 											const image = await readerFactory(
@@ -165,4 +171,21 @@ export const idbAction = (
 		openReq.onerror = () => reject(openReq.error);
 	});
 	return promise;
+};
+
+export const FileWithURL = function (file, url, additionalProps = null) {
+	if (additionalProps) {
+		Object.keys(additionalProps).forEach((key) => {
+			this[key] = additionalProps[key];
+		});
+	}
+	const fileInfo = {
+		lastModified: file.lastModified,
+		lastModifiedDate: file.lastModifiedDate,
+		name: file.name,
+		size: file.size,
+		type: file.type,
+	};
+	this.imageInfo = fileInfo;
+	this.image = url;
 };
