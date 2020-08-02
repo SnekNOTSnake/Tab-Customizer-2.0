@@ -5,6 +5,8 @@ import Main from './Main';
 import DataContext from '../dataContext';
 import { idbAction } from '../../utils/helpers';
 
+const loader = document.querySelector('.loader');
+
 const Newtab = () => {
 	const [backgrounds, setBackgrounds] = React.useState([]);
 	const [shortcuts, setShortcuts] = React.useState([]);
@@ -26,6 +28,8 @@ const Newtab = () => {
 					showNsfw,
 				});
 				setBackgrounds(backgrounds);
+				// Close the loader immediately if there's no background left
+				if (!backgrounds.length) loader.classList.add('loaded');
 			};
 			openRequest.onerror = () => console.error(openRequest.error);
 		});

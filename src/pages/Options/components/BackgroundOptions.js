@@ -1,9 +1,18 @@
 import React from 'react';
 import { withFormik } from 'formik';
 import * as Yup from 'yup';
+import { idbAction } from '../../utils/helpers';
 import useStyle from '../styles/BackgroundOptions-style';
 import { chromeOptions } from '../../../assets/defaultValues';
 
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogActions from '@material-ui/core/DialogActions';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -13,6 +22,8 @@ import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import WarningIcon from '@material-ui/icons/Warning';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 // Small Alert Component
 const Alert = (props) => <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -30,6 +41,27 @@ const BackgroundOptions = (props) => {
 		handleSubmit,
 		setFieldValue,
 	} = props;
+
+	// Delete Confirmation
+	const [action, setAction] = React.useState(null);
+	const closeDialog = async (value) => {
+		if (!value) return setAction(null);
+		switch (value) {
+			case 'clearShortcuts':
+				const scClear = await idbAction('shortcuts', 'clearAll');
+				if (scClear) console.log('Shortcuts Cleared');
+				else console.log('Unable to clear shortcuts');
+				break;
+			case 'clearBackgrounds':
+				const bgClear = await idbAction('backgrounds', 'clearAll');
+				if (bgClear) console.log('Backgrounds Cleared');
+				else console.log('Unable to clear backgrounds');
+				break;
+			default:
+				break;
+		}
+		setAction(null);
+	};
 
 	// Snackbar
 	const closeSnackbar = () => setSnackbarIsOpen(false);
@@ -107,6 +139,62 @@ const BackgroundOptions = (props) => {
 					Reset
 				</Button>
 			</form>
+
+			<Accordion style={{ margin: '48px 0', maxWidth: 500 }}>
+				<AccordionSummary expandIcon={<ExpandMoreIcon />}>
+					<WarningIcon
+						color="secondary"
+						style={{ fontSize: 30, marginRight: 8 }}
+					/>
+					<Typography variant="h6">Danger Zone</Typography>
+				</AccordionSummary>
+				<AccordionDetails>
+					<Button
+						variant="contained"
+						color="primary"
+						type="button"
+						onClick={() => setAction('clearBackgrounds')}
+						style={{ marginRight: '8px' }}
+					>
+						Clear Backgrounds
+					</Button>
+					<Button
+						variant="contained"
+						color="primary"
+						type="button"
+						onClick={() => setAction('clearShortcuts')}
+					>
+						Clear Shortcuts
+					</Button>
+				</AccordionDetails>
+			</Accordion>
+
+			<Dialog open={Boolean(action)} onClose={() => closeDialog(null)}>
+				<DialogTitle>Clear Confirmation</DialogTitle>
+				<DialogContent>
+					<DialogContentText>
+						Are you sure you want to delete all of the{' '}
+						{action === 'clearShortcuts' ? 'shortcuts' : 'wallpapers'}? The
+						deleted data cannot be recovered.
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button
+						onClick={() => closeDialog(action)}
+						color="secondary"
+						variant="outlined"
+					>
+						Yes
+					</Button>
+					<Button
+						onClick={() => closeDialog(null)}
+						color="primary"
+						variant="outlined"
+					>
+						No
+					</Button>
+				</DialogActions>
+			</Dialog>
 
 			<Snackbar
 				anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}

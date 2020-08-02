@@ -4,6 +4,7 @@ import { idbAction, readerFactory, FileWithURL } from '../../utils/helpers';
 import useStyle from '../styles/Backgrounds-style';
 import Background from './Background';
 import BackgroundPreview from './BackgroundPreview';
+import BackgroundInfo from './BackgroundInfo';
 
 import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
@@ -13,10 +14,32 @@ import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
 
+const infoInit = {
+	name: '',
+	lastModified: null,
+	width: null,
+	height: null,
+	size: null,
+	type: '',
+};
+
 const Backgrounds = ({ match, setProgress }) => {
 	const [backgrounds, setBackgrounds] = React.useState([]);
 	const [totalBgs, setTotalBgs] = React.useState(0);
 	const [limit, setLimit] = React.useState(9);
+
+	// Background Info Dialog
+	const [fileInfo, setFileInfo] = React.useState(infoInit);
+	const [infoAnchor, setInfoAnchor] = React.useState(null);
+	const openInfo = (fileInfo, anchorEl) => {
+		const { name, lastModified, width, height, size, type } = fileInfo;
+		setFileInfo({ name, lastModified, width, height, size, type });
+		setInfoAnchor(anchorEl);
+	};
+	const closeInfo = () => {
+		setInfoAnchor(null);
+		setTimeout(() => setFileInfo(infoInit), 250);
+	};
 
 	// Preview
 	const [previewIsOpen, setPreviewIsOpen] = React.useState(false);
@@ -112,6 +135,7 @@ const Backgrounds = ({ match, setProgress }) => {
 						openPreview={openPreview}
 						forceUpdate={forceUpdate}
 						bg={bg}
+						openInfo={openInfo}
 					/>
 				))}
 			</Grid>
@@ -135,6 +159,11 @@ const Backgrounds = ({ match, setProgress }) => {
 				closePreview={closePreview}
 				imagePreview={imagePreview}
 				forceUpdate={forceUpdate}
+			/>
+			<BackgroundInfo
+				fileInfo={fileInfo}
+				anchorEl={infoAnchor}
+				closeInfo={closeInfo}
 			/>
 		</Container>
 	);

@@ -10,9 +10,26 @@ import Paper from '@material-ui/core/Paper';
 import DeleteIcon from '@material-ui/icons/Delete';
 import WorkIcon from '@material-ui/icons/Work';
 import WorkOutlineIcon from '@material-ui/icons/WorkOutline';
-import CheckIcon from '@material-ui/icons/Check';
 
-const Background = ({ bg, forceUpdate, openPreview }) => {
+const Background = ({ bg, forceUpdate, openPreview, openInfo }) => {
+	// Open Info
+	const paperRef = React.useRef(null);
+	const openInfoHandler = (e) => {
+		const img = new Image();
+		img.src = bg.image;
+
+		openInfo(
+			{
+				...bg.imageInfo,
+				lastModified: new Date(bg.imageInfo.lastModified).toLocaleString(),
+				size: Math.ceil(bg.imageInfo.size / 1000) + ' KB',
+				width: img.naturalWidth + ' px',
+				height: img.naturalHeight + ' px',
+			},
+			paperRef.current
+		);
+	};
+
 	// Open Preview
 	const openPreviewHandler = (e) => {
 		if (e.target === e.currentTarget) openPreview(bg);
@@ -46,24 +63,24 @@ const Background = ({ bg, forceUpdate, openPreview }) => {
 				style={{
 					backgroundImage: `url(${bg.image})`,
 				}}
+				ref={paperRef}
 			>
 				{Boolean(!bg.safe) && (
 					<Tooltip title="Tagged as NSFW" arrow>
-						<div className={classes.nsfw}>N</div>
+						<div
+							onClick={() => tagNsfwBackground(bg.key, !bg.safe)}
+							className={classes.nsfwButton}
+						>
+							N
+						</div>
 					</Tooltip>
 				)}
+				<Tooltip title="Wallpaper Info" arrow>
+					<div onClick={openInfoHandler} className={classes.infoButton}>
+						i
+					</div>
+				</Tooltip>
 				<div className={classes.itemMenu}>
-					<Tooltip title="Absolute Wallpaper" arrow>
-						<Button
-							color="primary"
-							variant="contained"
-							className={classes.itemMenuButton}
-							type="button"
-							size="small"
-						>
-							<CheckIcon />
-						</Button>
-					</Tooltip>
 					<Tooltip title={bg.safe ? 'Tag as NSFW' : 'Tag as SFW'} arrow>
 						<Button
 							variant="contained"

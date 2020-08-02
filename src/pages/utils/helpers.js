@@ -163,6 +163,14 @@ export const idbAction = (
 					getReq.onerror = () => reject('Unable to update');
 					break;
 
+				case 'clearAll':
+					tx = db.transaction(storeName, 'readwrite');
+					openedStore = tx.objectStore(storeName);
+					const clearReq = openedStore.clear();
+					clearReq.onsuccess = () => resolve(true);
+					clearReq.onerror = () => reject('Unable to clear');
+					break;
+
 				default:
 					reject('No operation is provided');
 					break;

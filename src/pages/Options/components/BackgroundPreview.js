@@ -58,7 +58,7 @@ const BackgroundPreview = ({
 						return;
 					}
 					blob.name = fileName;
-					resolve(new File([blob], fileName));
+					resolve(new File([blob], fileName, { type: 'image/jpeg' }));
 				},
 				'image/jpeg',
 				0.85

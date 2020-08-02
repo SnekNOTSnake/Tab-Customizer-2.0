@@ -6,7 +6,7 @@ const linkBorder = 4;
 export default makeStyles((theme) => ({
 	'@global': {
 		h4: {
-			marginBottom: `${theme.spacing(2)}px !important`,
+			marginBottom: `${theme.spacing(4)}px !important`,
 		},
 	},
 	root: {
