@@ -22,9 +22,6 @@ import InfoIcon from '@material-ui/icons/Info';
 const loader = document.querySelector('.loader');
 
 const Options = () => {
-	// Snackbar
-	const [snackbarIsOpen, setSnackbarIsOpen] = React.useState(false);
-
 	// Drawer
 	const [drawerIsOpen, setDrawerIsOpen] = React.useState(true);
 	const toggleDrawer = () => setDrawerIsOpen((initVal) => !initVal);
@@ -131,13 +128,7 @@ const Options = () => {
 					<Route
 						exact
 						path="/wallpaper-options"
-						render={() => (
-							<BackgroundOptions
-								setSnackbarIsOpen={setSnackbarIsOpen}
-								snackbarIsOpen={snackbarIsOpen}
-								setProgress={setProgress}
-							/>
-						)}
+						render={() => <BackgroundOptions setProgress={setProgress} />}
 					/>
 					<Route exact path="/about" render={() => <About />} />
 					<Route render={() => <NotFound />} />

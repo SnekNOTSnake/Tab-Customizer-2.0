@@ -1,5 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
+import filesize from 'filesize';
 import useStyle from '../styles/Background-style';
 import { idbAction } from '../../utils/helpers';
 
@@ -22,9 +23,9 @@ const Background = ({ bg, forceUpdate, openPreview, openInfo }) => {
 			{
 				...bg.imageInfo,
 				lastModified: new Date(bg.imageInfo.lastModified).toLocaleString(),
-				size: Math.ceil(bg.imageInfo.size / 1000) + ' KB',
-				width: img.naturalWidth + ' px',
-				height: img.naturalHeight + ' px',
+				size: filesize(bg.imageInfo.size),
+				width: img.naturalWidth + 'px',
+				height: img.naturalHeight + 'px',
 			},
 			paperRef.current
 		);

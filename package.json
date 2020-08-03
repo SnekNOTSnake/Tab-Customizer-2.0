@@ -20,6 +20,7 @@
 		"@types/chrome": "0.0.104",
 		"@types/react": "^16.9.26",
 		"clsx": "^1.1.1",
+		"filesize": "^6.1.0",
 		"formik": "^2.1.5",
 		"lodash.clonedeep": "^4.5.0",
 		"react": "^16.13.1",

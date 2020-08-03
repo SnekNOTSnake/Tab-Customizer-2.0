@@ -27,8 +27,15 @@ export const idbAction = (
 	storeName,
 	actionName,
 	value = null,
-	options = { noConversion: false, page: 1, limit: 21, showNsfw: true }
+	definedOptions
 ) => {
+	const options = {
+		noConversion: false,
+		page: 1,
+		limit: 21,
+		showNsfw: true,
+		...definedOptions,
+	};
 	const promise = new Promise((resolve, reject) => {
 		const openReq = indexedDB.open('newTab2');
 		let tx, openedStore;
