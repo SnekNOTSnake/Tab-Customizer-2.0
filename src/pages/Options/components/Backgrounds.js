@@ -72,7 +72,7 @@ const Backgrounds = ({ match, setProgress }) => {
 		});
 		let update = false;
 		filtered.forEach(async (file, i) => {
-			const result = await idbAction('backgrounds', 'createOne', {
+			const result = await idbAction.add('backgrounds', {
 				image: file,
 				safe: 1,
 			});
@@ -88,28 +88,35 @@ const Backgrounds = ({ match, setProgress }) => {
 	};
 
 	React.useEffect(() => {
-		chrome.storage.sync.get({ itemsPerPage: 9 }, ({ itemsPerPage }) => {
+		chrome.storage.sync.get({ itemsPerPage: 9 }, async ({ itemsPerPage }) => {
 			setLimit(itemsPerPage);
 
+			// Initiate progressbar
 			setProgress(32);
 			let timeout = null;
+
 			// Paginate backgrounds
-			idbAction('backgrounds', 'getAll', null, {
-				page: match.params.page || 1,
-				limit: itemsPerPage,
-				noConversion: true,
-			}).then(async (bgs) => {
-				const bgsData = await Promise.all(
-					bgs.data.map(async (bg) => {
-						const imgURL = await readerFactory(bg.image, 'readAsDataURL');
-						return new FileWithURL(bg.image, imgURL, bg);
-					})
-				);
-				setBackgrounds(bgsData);
-				setTotalBgs(bgs.allKeys.length);
-				setProgress(100);
-				timeout = setTimeout(() => setProgress(null), 500);
-			});
+			const bgKeys = await idbAction.keys('backgrounds');
+			const bgs = await idbAction.getAll(
+				'backgrounds',
+				null,
+				true,
+				null,
+				match.params.page,
+				itemsPerPage
+			);
+			const bgsData = await Promise.all(
+				bgs.map(async (bg) => {
+					const imgURL = await readerFactory(bg.image, 'readAsDataURL');
+					return new FileWithURL(bg.image, imgURL, bg);
+				})
+			);
+			setBackgrounds(bgsData);
+			setTotalBgs(bgKeys.length);
+
+			// Stop the progressbar
+			setProgress(100);
+			timeout = setTimeout(() => setProgress(null), 500);
 			return () => clearTimeout(timeout);
 		});
 	}, [match.params.page, setProgress, state]);

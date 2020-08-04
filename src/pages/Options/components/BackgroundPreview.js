@@ -78,10 +78,7 @@ const BackgroundPreview = ({
 		const file = await getCroppedImg(imgRef.current, crop, imageInfo.name);
 		const reader = new FileReader();
 		reader.onload = () => {
-			idbAction('backgrounds', 'updateOne', {
-				key,
-				data: { image: file, safe },
-			}).then((value) => {
+			idbAction.put('backgrounds', key, { image: file, safe }).then((value) => {
 				handleClosePreview();
 				forceUpdate();
 			});

@@ -26,7 +26,7 @@ const ContextMenu = ({ anchorEl, onClose, openDialog }) => {
 		const index = anchorEl.attributes.index.value;
 		setShortcuts((initVal) => {
 			const newShortcuts = cloneDeep(initVal);
-			idbAction('shortcuts', 'deleteOne', Number(index));
+			idbAction.delete('shortcuts', Number(index));
 			return newShortcuts.filter((el) => el.key !== Number(index));
 		});
 		onClose();

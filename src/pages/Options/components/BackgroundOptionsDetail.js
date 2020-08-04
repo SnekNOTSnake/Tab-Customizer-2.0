@@ -15,25 +15,19 @@ const BackgroundOptionsDetail = () => {
 		shortcuts: { files: 0, totalSize: 0 },
 	});
 	const fetchData = async () => {
-		const bgsRawData = await idbAction('backgrounds', 'getAll', null, {
-			noConversion: true,
-			limit: 1000,
-		});
-		const scsRawData = await idbAction('shortcuts', 'getAll', null, {
-			noConversion: true,
-			limit: 1000,
-		});
-		const bgsSizes = bgsRawData.data.map((item) => item.image.size);
-		const scsSizes = scsRawData.data.map((item) => item.image.size);
+		const bgsRawData = await idbAction.getAll('backgrounds', null, true);
+		const scsRawData = await idbAction.getAll('shortcuts', null, true);
+		const bgsSizes = bgsRawData.map((item) => item.image.size);
+		const scsSizes = scsRawData.map((item) => item.image.size);
 		// bgsSize(numbers), scsSize(numbers), total
 		const data = {
 			backgrounds: {
 				files: bgsSizes.length,
-				totalSize: bgsSizes.reduce((p, c) => p + c),
+				totalSize: bgsSizes.reduce((p, c) => p + c, 0),
 			},
 			shortcuts: {
 				files: scsSizes.length,
-				totalSize: scsSizes.reduce((p, c) => p + c),
+				totalSize: scsSizes.reduce((p, c) => p + c, 0),
 			},
 		};
 		setData(data);

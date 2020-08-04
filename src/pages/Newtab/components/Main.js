@@ -53,12 +53,9 @@ const SortableList = SortableContainer(({ items, classes, openContext }) => {
 });
 
 const Main = () => {
-	const {
-		setShortcuts,
-		backgrounds: bgKeys,
-		shortcuts,
-		defaultColor,
-	} = React.useContext(DataContext);
+	const { setShortcuts, bgKeys, shortcuts, defaultColor } = React.useContext(
+		DataContext
+	);
 
 	const root = React.useRef();
 	const [background, setBackground] = React.useState('');
@@ -95,7 +92,7 @@ const Main = () => {
 		if (bgKeys.length) {
 			// Load random image from DB
 			const rand = bgKeys[Math.floor(Math.random() * bgKeys.length)];
-			const bg = await idbAction('backgrounds', 'getOne', rand);
+			const bg = await idbAction.get('backgrounds', rand);
 			setBackground(bg.image);
 		}
 	}, [bgKeys]);

@@ -1,10 +1,11 @@
+import { openDB } from 'idb';
+
 // Default values
 import {
 	getInitBackgrounds,
 	getInitShortcuts,
 	chromeOptions,
 } from '../../assets/defaultValues';
-import { idbAction } from '../utils/helpers';
 
 // OnCommand
 chrome.commands.onCommand.addListener((command) => {
@@ -22,37 +23,45 @@ chrome.commands.onCommand.addListener((command) => {
 });
 
 // OnInstall
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.onInstalled.addListener(async () => {
 	// Set chrome options
 	chrome.storage.sync.set({ ...chromeOptions });
 	chrome.browserAction.setBadgeText({
 		text: chromeOptions.showNsfw ? 'ON' : '',
 	});
 
-	const openRequest = indexedDB.open('newTab2', 1);
+	// Fetch all of the initial files
+	const initScs = await getInitShortcuts();
+	const initBgs = await getInitBackgrounds();
 
-	openRequest.onsuccess = async () => {
-		// Shortcuts
-		const scs = await getInitShortcuts();
-		scs.forEach((shortcut) => {
-			idbAction('shortcuts', 'createOne', shortcut);
-		});
+	const db = await openDB('newTab2', 1, {
+		// onupgradeneeded
+		upgrade: (db) => {
+			const scs = db.createObjectStore('shortcuts', { autoIncrement: true });
+			const bgs = db.createObjectStore('backgrounds', { autoIncrement: true });
+			bgs.createIndex('safe_index', 'safe');
+		},
 
-		// Backgrounds
-		const bgs = await getInitBackgrounds();
-		bgs.forEach((background) => {
-			idbAction('backgrounds', 'createOne', background);
-		});
-	};
+		// On blocks
+		blocked: () =>
+			window.alert(
+				'One of the other tab has an older database version, please reload the tab'
+			),
+		blocking: () => window.alert('Database outdated, please reload'),
 
-	openRequest.onupgradeneeded = () => {
-		const db = openRequest.result;
-		db.createObjectStore('shortcuts', { autoIncrement: true });
-		const bgs = db.createObjectStore('backgrounds', { autoIncrement: true });
-		bgs.createIndex('safe_index', 'safe');
-	};
+		// Terminated
+		terminated: () => window.alert('Database opening abnormally terminated'),
+	});
 
-	openRequest.onerror = () => {
-		console.error(openRequest.error);
-	};
+	// Add all initial Shortcuts
+	{
+		const tx = db.transaction('shortcuts', 'readwrite');
+		await Promise.all([...initScs.map((sc) => tx.store.add(sc)), tx.done]);
+	}
+
+	// Add all initial Backgrounds
+	{
+		const tx = db.transaction('backgrounds', 'readwrite');
+		await Promise.all([...initBgs.map((sc) => tx.store.add(sc)), tx.done]);
+	}
 });

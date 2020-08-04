@@ -39,16 +39,15 @@ const Background = ({ bg, forceUpdate, openPreview, openInfo }) => {
 
 	// BackgroundActions
 	const deleteBackground = async (key) => {
-		const result = await idbAction('backgrounds', 'deleteOne', key);
-		if (result) {
-			console.log(`Deleted ${result}`);
+		const result = await idbAction.delete('backgrounds', key);
+		if (!result) {
+			console.log(`Deleted ${key}`);
 			forceUpdate();
 		}
 	};
 	const tagNsfwBackground = async (key, safe) => {
-		const result = await idbAction('backgrounds', 'updateOne', {
-			data: { safe: Number(safe) },
-			key,
+		const result = await idbAction.put('backgrounds', key, {
+			safe: Number(safe),
 		});
 		if (result) {
 			console.log(`Updated ${key}`);
@@ -86,6 +85,7 @@ const Background = ({ bg, forceUpdate, openPreview, openInfo }) => {
 					<Tooltip title={bg.safe ? 'Tag as NSFW' : 'Tag as SFW'} arrow>
 						<Button
 							variant="contained"
+							color="primary"
 							onClick={() => tagNsfwBackground(bg.key, !bg.safe)}
 							className={clsx(classes.itemMenuButton, classes.workButton)}
 							type="button"

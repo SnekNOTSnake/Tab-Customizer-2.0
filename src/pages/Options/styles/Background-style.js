@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
+import { orange } from '@material-ui/core/colors';
 
 export default makeStyles((theme) => ({
 	item: {
@@ -36,8 +37,11 @@ export default makeStyles((theme) => ({
 		margin: theme.spacing(0, 0.5),
 	},
 	workButton: {
-		backgroundColor: theme.palette.warning.main,
+		backgroundColor: orange[500],
 		color: '#fff',
+		'&:hover': {
+			backgroundColor: orange[700],
+		},
 	},
 	nsfwButton: {
 		display: 'flex',

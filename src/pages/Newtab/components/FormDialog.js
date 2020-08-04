@@ -52,9 +52,7 @@ const FormDialog = (props) => {
 	// Edit
 	const fetchSc = React.useCallback(async () => {
 		if (editIndex) {
-			const sc = await idbAction('shortcuts', 'getOne', editIndex, {
-				noConversion: true,
-			});
+			const sc = await idbAction.get('shortcuts', editIndex, true);
 			setFieldValue('name', sc.name);
 			setFieldValue('url', sc.url);
 			setFieldValue('files', sc.image);
@@ -189,9 +187,10 @@ const EnhancedForm = withFormik({
 		// Edit and Add Form Confirm
 		if (editIndex) {
 			// Edit shortcut
-			const result = await idbAction('shortcuts', 'updateOne', {
-				data: { name, url, image: files },
-				key: editIndex,
+			const result = await idbAction.put('shortcuts', editIndex, {
+				name,
+				url,
+				image: files,
 			});
 
 			const image = await readerFactory(files, 'readAsDataURL');
@@ -205,7 +204,8 @@ const EnhancedForm = withFormik({
 
 					newShortcuts.splice(alteredIdx, 1, {
 						key: editIndex,
-						...result.data,
+						name,
+						url,
 						image,
 					});
 					return newShortcuts;
@@ -214,7 +214,7 @@ const EnhancedForm = withFormik({
 		} else {
 			// Add shortcut
 			const newSc = { name, url, image: files };
-			const newScId = await idbAction('shortcuts', 'createOne', newSc);
+			const newScId = await idbAction.add('shortcuts', newSc);
 			const imageURL = await readerFactory(files, 'readAsDataURL');
 			setShortcuts((initVal) => [
 				...initVal,

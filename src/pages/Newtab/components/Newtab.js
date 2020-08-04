@@ -8,30 +8,45 @@ import { idbAction } from '../../utils/helpers';
 const loader = document.querySelector('.loader');
 
 const Newtab = () => {
-	const [backgrounds, setBackgrounds] = React.useState([]);
+	const [bgKeys, setBgKeys] = React.useState([]);
 	const [shortcuts, setShortcuts] = React.useState([]);
 	const [options, setOptions] = React.useState({ showNsfw: true });
 
 	React.useEffect(() => {
-		chrome.storage.sync.get({ showNsfw: true }, ({ showNsfw }) => {
+		chrome.storage.sync.get({ showNsfw: true }, async ({ showNsfw }) => {
 			setOptions({ showNsfw });
 
-			const openRequest = indexedDB.open('newTab2');
-			openRequest.onupgradeneeded = () => alert('Please re-install extension');
-			openRequest.onsuccess = async () => {
-				// Shortcuts
-				const shortcuts = await idbAction('shortcuts', 'getAll');
-				setShortcuts(shortcuts.data);
+			/* idbAction
+				.get('backgrounds', 1, true)
+				.then((value) => console.log(value));
+			idbAction
+				.getAll('backgrounds', null, true, null, 3, 2)
+				.then((value) => console.log(value));
+			idbAction
+				.keys('backgrounds', 'safe_index', 1)
+				.then((value) => console.log(value));
+			const time = new Date().getTime();
+			idbAction
+				.put('backgrounds', 1, { safe: 1 })
+				.then((value) => console.log(value, new Date().getTime() - time))
+				.catch((err) => console.log(err)); */
+			// get, getAll, keys, put
+			// add, clear, delete
 
-				// Backgrounds
-				const backgrounds = await idbAction('backgrounds', 'getAllKeys', null, {
-					showNsfw,
-				});
-				setBackgrounds(backgrounds);
-				// Close the loader immediately if there's no background left
-				if (!backgrounds.length) loader.classList.add('loaded');
-			};
-			openRequest.onerror = () => console.error(openRequest.error);
+			// Get Shortcuts from DB
+			const scsData = await idbAction.getAll('shortcuts');
+			setShortcuts(scsData);
+
+			// Get BgKeys from DB
+			const bgKeysData = await idbAction.keys(
+				'backgrounds',
+				'safe_index',
+				showNsfw ? null : 1
+			);
+			setBgKeys(bgKeysData);
+
+			// Close the loader immediately if there's no background left
+			if (!bgKeysData.length) loader.classList.add('loaded');
 		});
 	}, []);
 
@@ -42,9 +57,9 @@ const Newtab = () => {
 			value={{
 				defaultColor,
 				shortcuts,
-				backgrounds,
+				bgKeys,
 				options,
-				setBackgrounds,
+				setBackgrounds: setBgKeys,
 				setShortcuts,
 				setOptions,
 			}}

@@ -22,14 +22,16 @@ const BackgroundOptionsDangerZone = ({ openSnackbar }) => {
 		if (!value) return setAction(null);
 		switch (value) {
 			case 'clearShortcuts':
-				const scClear = await idbAction('shortcuts', 'clearAll');
-				if (scClear) openSnackbar('success', 'Shortcuts cleared!');
-				else openSnackbar('error', 'Unable to clear shortcuts');
+				idbAction
+					.clear('shortcuts')
+					.then(() => openSnackbar('success', 'Shortcuts cleared!'))
+					.catch(() => openSnackbar('error', 'Unable to clear shortcuts'));
 				break;
 			case 'clearBackgrounds':
-				const bgClear = await idbAction('backgrounds', 'clearAll');
-				if (bgClear) openSnackbar('success', 'Backgrounds cleared!');
-				else openSnackbar('error', 'Unable to clear backgrounds');
+				idbAction
+					.clear('backgrounds')
+					.then(() => openSnackbar('success', 'Backgrounds cleared!'))
+					.catch(() => openSnackbar('error', 'Unable to clear backgrounds'));
 				break;
 			default:
 				break;
