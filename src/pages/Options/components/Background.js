@@ -1,8 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
 import filesize from 'filesize';
-import useStyle from '../styles/Background-style';
-import { idbAction } from '../../utils/helpers';
 
 import Grid from '@material-ui/core/Grid';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -11,6 +9,9 @@ import Paper from '@material-ui/core/Paper';
 import DeleteIcon from '@material-ui/icons/Delete';
 import WorkIcon from '@material-ui/icons/Work';
 import WorkOutlineIcon from '@material-ui/icons/WorkOutline';
+
+import useStyle from '../styles/Background-style';
+import { idbAction } from '../../utils/helpers';
 
 const Background = ({ bg, forceUpdate, openPreview, openInfo }) => {
 	// Open Info

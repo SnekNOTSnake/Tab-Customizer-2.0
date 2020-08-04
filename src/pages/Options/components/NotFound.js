@@ -1,10 +1,13 @@
 import React from 'react';
 
+import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
+
 const NotFound = () => {
 	return (
-		<div className="NotFound">
-			<h2>NotFound</h2>
-		</div>
+		<Container fixed>
+			<Typography variant="h4">404 Page Not Found</Typography>
+		</Container>
 	);
 };
 

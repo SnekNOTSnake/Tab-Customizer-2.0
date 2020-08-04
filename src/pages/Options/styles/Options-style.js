@@ -6,7 +6,7 @@ const linkBorder = 4;
 export default makeStyles((theme) => ({
 	'@global': {
 		h4: {
-			marginBottom: `${theme.spacing(4)}px !important`,
+			marginBottom: theme.spacing(4),
 		},
 	},
 	root: {
@@ -14,7 +14,7 @@ export default makeStyles((theme) => ({
 		backgroundColor: '#fff',
 	},
 	icon: {
-		fill: '#fff !important',
+		fill: '#fff',
 	},
 	drawer: {
 		width: drawerWidth,
@@ -37,7 +37,7 @@ export default makeStyles((theme) => ({
 		backgroundColor: '#222831',
 	},
 	link: {
-		paddingLeft: `${16 + linkBorder}px !important`,
+		paddingLeft: 16 + linkBorder,
 		'&::before': {
 			content: '""',
 			display: 'block',
@@ -58,7 +58,7 @@ export default makeStyles((theme) => ({
 	},
 	whiteHover: {
 		'&:hover': {
-			backgroundColor: 'rgba(255, 255, 255, 0.075) !important',
+			backgroundColor: 'rgba(255, 255, 255, 0.075)',
 		},
 	},
 	main: {
@@ -74,7 +74,7 @@ export default makeStyles((theme) => ({
 		marginLeft: theme.spacing(7) + linkBorder,
 	},
 	progress: {
-		position: 'absolute !important',
+		position: 'absolute',
 		top: 0,
 		left: 0,
 		width: '100%',

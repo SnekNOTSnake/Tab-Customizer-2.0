@@ -2,8 +2,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles((theme) => ({
 	dialogPaper: {
-		width: '100% !important',
-		textAlign: 'center !important',
+		width: '100%',
+		textAlign: 'center',
 		fontSize: 0,
 		'& div': {
 			fontSize: '1rem',

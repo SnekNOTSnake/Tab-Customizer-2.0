@@ -1,5 +1,4 @@
 import React from 'react';
-import { idbAction } from '../../utils/helpers';
 
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -13,6 +12,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Typography from '@material-ui/core/Typography';
 import WarningIcon from '@material-ui/icons/Warning';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
+import { idbAction } from '../../utils/helpers';
 
 const BackgroundOptionsDangerZone = ({ openSnackbar }) => {
 	// Delete Confirmation

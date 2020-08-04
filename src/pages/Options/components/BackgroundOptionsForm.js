@@ -2,14 +2,14 @@ import React from 'react';
 import { withFormik } from 'formik';
 import * as Yup from 'yup';
 
-import { chromeOptions } from '../../../assets/defaultValues';
-import useStyle from '../styles/BackgroundOptionsForm-style';
-
 import Button from '@material-ui/core/Button';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import TextField from '@material-ui/core/TextField';
+
+import { chromeOptions } from '../../../assets/defaultValues';
+import useStyle from '../styles/BackgroundOptionsForm-style';
 
 const BackgroundOptionsForm = (props) => {
 	const {

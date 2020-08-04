@@ -1,13 +1,14 @@
 import React from 'react';
-import useStyle from '../styles/BackgroundOptions-style';
-import BackgroundOptionsForm from './BackgroundOptionsForm';
-import BackgroundOptionsDangerZone from './BackgroundOptionsDangerZone';
-import BackgroundOptionsDetail from './BackgroundOptionsDetail';
 
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
+
+import useStyle from '../styles/BackgroundOptions-style';
+import BackgroundOptionsForm from './BackgroundOptionsForm';
+import BackgroundOptionsDangerZone from './BackgroundOptionsDangerZone';
+import BackgroundOptionsDetail from './BackgroundOptionsDetail';
 
 // Small Alert Component
 const Alert = (props) => <MuiAlert elevation={6} variant="filled" {...props} />;

@@ -1,13 +1,14 @@
 import React from 'react';
 import ReactCrop from 'react-image-crop';
-import 'react-image-crop/dist/ReactCrop.css';
-import { idbAction } from '../../utils/helpers';
-import useStyle from '../styles/BackgroundPreview-style';
 
 import Dialog from '@material-ui/core/Dialog';
 import Fab from '@material-ui/core/Fab';
 import Tooltip from '@material-ui/core/Tooltip';
 import CropIcon from '@material-ui/icons/Crop';
+
+import 'react-image-crop/dist/ReactCrop.css';
+import { idbAction } from '../../utils/helpers';
+import useStyle from '../styles/BackgroundPreview-style';
 
 const initCrop = {
 	unit: '%',

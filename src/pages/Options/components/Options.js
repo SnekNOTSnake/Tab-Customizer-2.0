@@ -2,12 +2,6 @@ import React from 'react';
 import { Switch, NavLink, Route, Redirect } from 'react-router-dom';
 import clsx from 'clsx';
 
-import Backgrounds from './Backgrounds';
-import BackgroundOptions from './BackgroundOptions';
-import NotFound from './NotFound';
-import About from './About';
-import useStyle from '../styles/Options-style.js';
-
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
@@ -18,6 +12,12 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import WallpaperIcon from '@material-ui/icons/Wallpaper';
 import SettingsIcon from '@material-ui/icons/Settings';
 import InfoIcon from '@material-ui/icons/Info';
+
+import Backgrounds from './Backgrounds';
+import BackgroundOptions from './BackgroundOptions';
+import NotFound from './NotFound';
+import About from './About';
+import useStyle from '../styles/Options-style.js';
 
 const loader = document.querySelector('.loader');
 

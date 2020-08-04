@@ -1,11 +1,12 @@
 import React from 'react';
-import useStyle from '../styles/Popup-style';
-import logo from '../../../assets/img/sns-logo.png';
 
 import Typography from '@material-ui/core/Typography';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Paper from '@material-ui/core/Paper';
 import Switch from '@material-ui/core/Switch';
+
+import useStyle from '../styles/Popup-style';
+import logo from '../../../assets/img/sns-logo.png';
 
 const setShowNsfw = (showNsfw) =>
 	chrome.browserAction.setBadgeText({ text: showNsfw ? 'ON' : '' });

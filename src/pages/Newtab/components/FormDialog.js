@@ -3,9 +3,6 @@ import cloneDeep from 'lodash.clonedeep';
 import { withFormik } from 'formik';
 import * as Yup from 'yup';
 
-import { idbAction, readerFactory } from '../../utils/helpers';
-import useStyle from '../styles/FormDialog-style';
-
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
@@ -16,6 +13,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import CloseIcon from '@material-ui/icons/CloseRounded';
 import CheckIcon from '@material-ui/icons/CheckRounded';
 import AddIcon from '@material-ui/icons/Add';
+
+import { idbAction, readerFactory } from '../../utils/helpers';
+import useStyle from '../styles/FormDialog-style';
 
 // Files Test Validators
 const validateSize = (value) => {
@@ -98,11 +98,16 @@ const FormDialog = (props) => {
 
 	const classes = useStyle();
 	return (
-		<Dialog open={open} onClose={handleCancel}>
+		<Dialog
+			classes={{ paper: classes.dialogPaper }}
+			open={open}
+			onClose={handleCancel}
+		>
 			<form className="test" onSubmit={handleSubmit}>
 				<DialogTitle>{title}</DialogTitle>
 				<DialogContent>
 					<TextField
+						fullWidth
 						variant="outlined"
 						className={classes.textField}
 						placeholder="Lorem ipsum is good"
@@ -115,6 +120,7 @@ const FormDialog = (props) => {
 						error={errors.name && touched.name}
 					/>
 					<TextField
+						fullWidth
 						variant="outlined"
 						className={classes.textField}
 						placeholder="loremipsum.com"

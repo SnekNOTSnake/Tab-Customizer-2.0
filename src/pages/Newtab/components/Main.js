@@ -6,16 +6,16 @@ import {
 	arrayMove,
 } from 'react-sortable-hoc';
 
+import SettingsIcon from '@material-ui/icons/Settings';
+import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+import AddIcon from '@material-ui/icons/AddRounded';
+
 import DataContext from '../dataContext';
 import useStyle from '../styles/Main-style';
 import ContextMenu from './ContextMenu';
 import FormDialog from './FormDialog';
 import { idbAction } from '../../utils/helpers';
-
-import SettingsIcon from '@material-ui/icons/Settings';
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
-import AddIcon from '@material-ui/icons/AddRounded';
 
 // Loader element
 const loader = document.querySelector('.loader');

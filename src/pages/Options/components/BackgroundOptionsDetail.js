@@ -1,12 +1,13 @@
 import React from 'react';
 import filesize from 'filesize';
-import { idbAction } from '../../utils/helpers';
 
 import TableContainer from '@material-ui/core/TableContainer';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
+
+import { idbAction } from '../../utils/helpers';
 
 const BackgroundOptionsDetail = () => {
 	const [data, setData] = React.useState({

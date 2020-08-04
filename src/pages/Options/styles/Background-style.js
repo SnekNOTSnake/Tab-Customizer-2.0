@@ -33,11 +33,11 @@ export default makeStyles((theme) => ({
 		}),
 	},
 	itemMenuButton: {
-		margin: `${theme.spacing(0, 0.5)} !important`,
+		margin: theme.spacing(0, 0.5),
 	},
 	workButton: {
-		backgroundColor: `${theme.palette.warning.main} !important`,
-		color: '#fff !important',
+		backgroundColor: theme.palette.warning.main,
+		color: '#fff',
 	},
 	nsfwButton: {
 		display: 'flex',

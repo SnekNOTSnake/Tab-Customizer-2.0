@@ -1,10 +1,5 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { idbAction, readerFactory, FileWithURL } from '../../utils/helpers';
-import useStyle from '../styles/Backgrounds-style';
-import Background from './Background';
-import BackgroundPreview from './BackgroundPreview';
-import BackgroundInfo from './BackgroundInfo';
 
 import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
@@ -13,6 +8,12 @@ import PaginationItem from '@material-ui/lab/PaginationItem';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
+
+import { idbAction, readerFactory, FileWithURL } from '../../utils/helpers';
+import useStyle from '../styles/Backgrounds-style';
+import Background from './Background';
+import BackgroundPreview from './BackgroundPreview';
+import BackgroundInfo from './BackgroundInfo';
 
 const infoInit = {
 	name: '',

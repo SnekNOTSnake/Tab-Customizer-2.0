@@ -1,5 +1,4 @@
 import React from 'react';
-import useStyle from '../styles/BackgroundInfo-style';
 
 import Popover from '@material-ui/core/Popover';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -7,6 +6,8 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
+
+import useStyle from '../styles/BackgroundInfo-style';
 
 const Row = ({ label, value }) => (
 	<TableRow>

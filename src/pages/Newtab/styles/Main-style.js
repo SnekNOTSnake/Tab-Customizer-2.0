@@ -62,8 +62,8 @@ export default makeStyles((theme) => ({
 		},
 	},
 	addShortcutIcon: {
-		fill: 'rgba(0, 0, 0, 0.57) !important',
-		fontSize: '4rem !important',
+		fill: 'rgba(0, 0, 0, 0.57)',
+		fontSize: '4rem',
 	},
 	icon: {
 		display: 'inline-flex',
