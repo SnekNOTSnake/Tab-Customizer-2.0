@@ -64,7 +64,6 @@ const BackgroundOptionsForm = (props) => {
 							onBlur={handleBlur}
 							name="showNsfw"
 							checked={values.showNsfw}
-							value={values.showNsfw}
 						/>
 					}
 					label="Show NSFW"

@@ -9,7 +9,7 @@
 	},
 	"browser_action": {
 		"default_popup": "popup.html",
-		"default_icon": "icon-128.png"
+		"default_icon": "sns-logo.png"
 	},
 	"chrome_url_overrides": {
 		"newtab": "newtab.html"
@@ -24,9 +24,9 @@
 		}
 	},
 	"icons": {
-		"128": "icon-128.png"
+		"128": "sns-logo.png"
 	},
-	"web_accessible_resources": ["icon-128.png"],
+	"web_accessible_resources": ["sns-logo.png"],
 	"manifest_version": 2,
 	"content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }

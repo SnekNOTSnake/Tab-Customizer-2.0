@@ -115,7 +115,10 @@ const Main = () => {
 
 	// OnSortEnd
 	const onSortEnd = ({ oldIndex, newIndex }) => {
-		setShortcuts((initVal) => arrayMove(initVal, oldIndex, newIndex));
+		setShortcuts((initVal) => {
+			console.log(arrayMove(initVal, oldIndex, newIndex));
+			return arrayMove(initVal, oldIndex, newIndex);
+		});
 	};
 
 	const classes = useStyle({ defaultColor });
@@ -123,7 +126,7 @@ const Main = () => {
 		<div ref={root} className={classes.root}>
 			<div className={classes.shortcuts}>
 				<SortableList
-					distance={1}
+					distance={2}
 					items={shortcuts}
 					onSortEnd={onSortEnd}
 					axis="xy"

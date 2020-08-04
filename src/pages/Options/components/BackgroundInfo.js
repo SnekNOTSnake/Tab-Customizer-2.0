@@ -1,4 +1,5 @@
 import React from 'react';
+import useStyle from '../styles/BackgroundInfo-style';
 
 import Popover from '@material-ui/core/Popover';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -21,6 +22,7 @@ const capitalize = (str) => {
 };
 
 const BackgroundInfo = ({ anchorEl, fileInfo, closeInfo }) => {
+	const classes = useStyle();
 	return (
 		<Popover
 			open={Boolean(anchorEl)}
@@ -28,6 +30,7 @@ const BackgroundInfo = ({ anchorEl, fileInfo, closeInfo }) => {
 			anchorEl={anchorEl}
 			anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
 			transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+			classes={{ paper: classes.paper }}
 		>
 			<TableContainer>
 				<Table>

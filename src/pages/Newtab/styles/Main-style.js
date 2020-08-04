@@ -38,12 +38,14 @@ export default makeStyles((theme) => ({
 		textAlign: 'center',
 		justifyContent: 'center',
 		cursor: 'pointer',
-		transition: theme.transitions.create('transform', {
-			duration: theme.transitions.duration.shorter,
+		position: 'relative',
+		bottom: 0,
+		transition: `transform 0s ease-out, ${theme.transitions.create('bottom', {
+			duration: theme.transitions.duration.shortest,
 			easing: theme.transitions.easing.easeOut,
-		}),
+		})}`,
 		'&:hover': {
-			transform: 'translateY(-5px)',
+			bottom: 5,
 		},
 	},
 	addShortcut: {
@@ -55,7 +57,7 @@ export default makeStyles((theme) => ({
 				easing: theme.transitions.easing.easeOut,
 			}),
 			'&:hover': {
-				transform: 'translateY(-5px)',
+				bottom: 5,
 			},
 		},
 	},
