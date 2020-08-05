@@ -1,10 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import {
-	SortableContainer,
-	SortableElement,
-	arrayMove,
-} from 'react-sortable-hoc';
+import arrayMove from 'array-move';
 
 import SettingsIcon from '@material-ui/icons/Settings';
 import Button from '@material-ui/core/Button';
@@ -15,42 +11,11 @@ import DataContext from '../dataContext';
 import useStyle from '../styles/Main-style';
 import ContextMenu from './ContextMenu';
 import FormDialog from './FormDialog';
+import SortableList from './SortableList';
 import { idbAction } from '../../utils/helpers';
 
 // Loader element
 const loader = document.querySelector('.loader');
-
-// Sortable HOC
-const SortableItem = SortableElement(({ item, classes, openContext }) => (
-	<a
-		href={item.url}
-		index={item.key}
-		onContextMenu={openContext}
-		className={classes.shortcut}
-		key={item.key}
-	>
-		<Paper
-			style={{ backgroundImage: `url(${item.image})` }}
-			className={classes.icon}
-		/>
-		<div className={classes.text}>{item.name}</div>
-	</a>
-));
-const SortableList = SortableContainer(({ items, classes, openContext }) => {
-	return (
-		<div className="sortable">
-			{items.map((item, index) => (
-				<SortableItem
-					openContext={openContext}
-					classes={classes}
-					index={index}
-					item={item}
-					key={item.key}
-				/>
-			))}
-		</div>
-	);
-});
 
 const Main = () => {
 	const { setShortcuts, bgKeys, shortcuts, defaultColor } = React.useContext(
@@ -113,8 +78,10 @@ const Main = () => {
 	// OnSortEnd
 	const onSortEnd = ({ oldIndex, newIndex }) => {
 		setShortcuts((initVal) => {
-			console.log(arrayMove(initVal, oldIndex, newIndex));
-			return arrayMove(initVal, oldIndex, newIndex);
+			const sorted = arrayMove(initVal, oldIndex, newIndex);
+			const keys = sorted.map((item) => item.key);
+			chrome.storage.sync.set({ order: keys });
+			return sorted;
 		});
 	};
 

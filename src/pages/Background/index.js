@@ -37,7 +37,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 	const db = await openDB('newTab2', 1, {
 		// onupgradeneeded
 		upgrade: (db) => {
-			const scs = db.createObjectStore('shortcuts', { autoIncrement: true });
+			db.createObjectStore('shortcuts', { autoIncrement: true });
 			const bgs = db.createObjectStore('backgrounds', { autoIncrement: true });
 			bgs.createIndex('safe_index', 'safe');
 		},

@@ -23,11 +23,18 @@ const ContextMenu = ({ anchorEl, onClose, openDialog }) => {
 
 	// Delete Shortcut
 	const deleteHandler = () => {
-		const index = anchorEl.attributes.index.value;
-		setShortcuts((initVal) => {
-			const newShortcuts = cloneDeep(initVal);
-			idbAction.delete('shortcuts', Number(index));
-			return newShortcuts.filter((el) => el.key !== Number(index));
+		const key = anchorEl.attributes.index.value;
+		chrome.storage.sync.get({ order: [] }, ({ order }) => {
+			const index = order.findIndex((item) => item === Number(key));
+			const newOrder = [...order];
+			newOrder.splice(index, 1);
+			chrome.storage.sync.set({ order: newOrder });
+
+			setShortcuts((initVal) => {
+				const newShortcuts = cloneDeep(initVal);
+				idbAction.delete('shortcuts', Number(key));
+				return newShortcuts.filter((el) => el.key !== Number(key));
+			});
 		});
 		onClose();
 	};

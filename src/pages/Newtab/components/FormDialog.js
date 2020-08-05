@@ -210,7 +210,7 @@ const EnhancedForm = withFormik({
 					});
 					return newShortcuts;
 				});
-			else console.log('Unable to update');
+			else console.error('Unable to update');
 		} else {
 			// Add shortcut
 			const newSc = { name, url, image: files };
@@ -220,6 +220,9 @@ const EnhancedForm = withFormik({
 				...initVal,
 				{ ...newSc, image: imageURL, key: newScId },
 			]);
+			chrome.storage.sync.get({ order: [] }, ({ order }) => {
+				chrome.storage.sync.set({ order: [...order, newScId] });
+			});
 		}
 		setTimeout(() => {
 			resetForm();

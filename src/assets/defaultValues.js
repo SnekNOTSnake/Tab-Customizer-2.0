@@ -33,33 +33,35 @@ const promisify = (array) =>
 		})
 	);
 
-export const getInitBackgrounds = () => {
-	return promisify([
-		{ image: img1, safe: 1 },
-		{ image: img2, safe: 1 },
-		{ image: img3, safe: 0 },
-		{ image: img4, safe: 1 },
-		{ image: img5, safe: 0 },
-		{ image: img6, safe: 1 },
-	]);
-};
-export const getInitShortcuts = () => {
-	return promisify([
-		{
-			name: 'Alphacoders',
-			url: 'https://wall.alphacoders.com',
-			image: alphaIcon,
-		},
-		{ name: 'Pixiv', url: 'https://pixiv.net', image: pixivIcon },
-		{ name: 'Mangadex', url: 'https://mangadex.org', image: mangadexIcon },
-		{
-			name: 'Myanimelist',
-			url: 'https://myanimelist.net',
-			image: myanimelistIcon,
-		},
-	]);
-};
+const initBackgrounds = [
+	{ image: img1, safe: 1 },
+	{ image: img2, safe: 1 },
+	{ image: img3, safe: 0 },
+	{ image: img4, safe: 1 },
+	{ image: img5, safe: 0 },
+	{ image: img6, safe: 1 },
+];
+
+const initShortcuts = [
+	{
+		name: 'Alphacoders',
+		url: 'https://wall.alphacoders.com',
+		image: alphaIcon,
+	},
+	{ name: 'Pixiv', url: 'https://pixiv.net', image: pixivIcon },
+	{ name: 'Mangadex', url: 'https://mangadex.org', image: mangadexIcon },
+	{
+		name: 'Myanimelist',
+		url: 'https://myanimelist.net',
+		image: myanimelistIcon,
+	},
+];
+
+// Export data
+export const getInitBackgrounds = () => promisify(initBackgrounds);
+export const getInitShortcuts = () => promisify(initShortcuts);
 export const chromeOptions = {
 	itemsPerPage: 9,
 	showNsfw: false,
+	order: Array.from(new Array(initShortcuts.length), (_, i) => i + 1),
 };
