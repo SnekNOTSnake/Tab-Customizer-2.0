@@ -24,7 +24,11 @@ const BackgroundOptionsDangerZone = ({ openSnackbar }) => {
 			case 'clearShortcuts':
 				idbAction
 					.clear('shortcuts')
-					.then(() => openSnackbar('success', 'Shortcuts cleared!'))
+					.then(() => {
+						chrome.storage.sync.set({ order: [] }, () =>
+							openSnackbar('success', 'Shortcuts cleared!')
+						);
+					})
 					.catch(() => openSnackbar('error', 'Unable to clear shortcuts'));
 				break;
 			case 'clearBackgrounds':
