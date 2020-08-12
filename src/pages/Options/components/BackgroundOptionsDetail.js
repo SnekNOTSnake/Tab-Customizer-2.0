@@ -17,8 +17,8 @@ const BackgroundOptionsDetail = () => {
 	const fetchData = async () => {
 		const bgsRawData = await idbAction.getAll('backgrounds', null, true);
 		const scsRawData = await idbAction.getAll('shortcuts', null, true);
-		const bgsSizes = bgsRawData.map((item) => item.image.size);
-		const scsSizes = scsRawData.map((item) => item.image.size);
+		const bgsSizes = bgsRawData.map((item) => item?.image?.size ?? 0);
+		const scsSizes = scsRawData.map((item) => item?.image?.size ?? 0);
 		// bgsSize(numbers), scsSize(numbers), total
 		const data = {
 			backgrounds: {

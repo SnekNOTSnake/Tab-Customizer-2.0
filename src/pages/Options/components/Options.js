@@ -21,6 +21,9 @@ import useStyle from '../styles/Options-style.js';
 
 const loader = document.querySelector('.loader');
 
+// Accept the HMR
+if (module.hot) module.hot.accept();
+
 const Options = () => {
 	// Drawer
 	const [drawerIsOpen, setDrawerIsOpen] = React.useState(true);
