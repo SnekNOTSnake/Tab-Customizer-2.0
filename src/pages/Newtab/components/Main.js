@@ -1,11 +1,8 @@
 import React from 'react';
-import clsx from 'clsx';
 import arrayMove from 'array-move';
 
 import SettingsIcon from '@material-ui/icons/Settings';
 import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
-import AddIcon from '@material-ui/icons/AddRounded';
 
 import DataContext from '../dataContext';
 import useStyle from '../styles/Main-style';
@@ -96,12 +93,8 @@ const Main = () => {
 					axis="xy"
 					classes={classes}
 					openContext={openContext}
+					openDialog={openDialog}
 				/>
-				<div className={clsx(classes.shortcut, classes.addShortcut)}>
-					<Paper onClick={() => openDialog()} className={classes.icon}>
-						<AddIcon className={classes.addShortcutIcon} />
-					</Paper>
-				</div>
 			</div>
 
 			<div className={classes.optionsButton}>

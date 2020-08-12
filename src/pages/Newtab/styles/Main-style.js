@@ -6,7 +6,6 @@ export default makeStyles((theme) => ({
 		backgroundColor: ({ defaultColor }) => defaultColor,
 		backgroundPosition: 'top center',
 		backgroundSize: 'cover',
-		backgroundRepeat: 'no-repeat',
 		position: 'relative',
 	},
 	optionsButton: {
@@ -23,11 +22,12 @@ export default makeStyles((theme) => ({
 		left: '50%',
 		transform: 'translate(-50%, -50%)',
 		width: '90%',
-		minWidth: 800,
 		maxWidth: 1200,
+		color: '#fff',
+	},
+	sortable: {
 		display: 'flex',
 		flexWrap: 'wrap',
-		color: '#fff',
 	},
 	shortcut: {
 		textDecoration: 'none',
@@ -71,7 +71,6 @@ export default makeStyles((theme) => ({
 		height: theme.spacing(9),
 		backgroundPosition: 'center',
 		backgroundSize: 'cover',
-		backgroundRepeat: 'no-repeat',
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
