@@ -64,4 +64,6 @@ export const chromeOptions = {
 	itemsPerPage: 9,
 	showNsfw: false,
 	order: Array.from(new Array(initShortcuts.length), (_, i) => i + 1),
+	shortcutsPosition: 'bottom',
+	shortcutsSize: 'medium',
 };

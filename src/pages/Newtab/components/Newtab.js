@@ -6,21 +6,34 @@ import DataContext from '../dataContext';
 import { idbAction } from '../../utils/helpers';
 
 const loader = document.querySelector('.loader');
+const getOptions = {
+	showNsfw: true,
+	order: [],
+	shortcutsPosition: 'bottom',
+	shortcutsSize: 'medium',
+};
+
+// Accept HMR
+if (module.hot) module.hot.accept();
 
 const Newtab = () => {
 	const [bgKeys, setBgKeys] = React.useState([]);
 	const [shortcuts, setShortcuts] = React.useState([]);
+	const [options, setOptions] = React.useState(null);
 
 	React.useEffect(() => {
 		chrome.storage.sync.get(
-			{ showNsfw: true, order: [] },
-			async ({ showNsfw, order }) => {
+			getOptions,
+			async ({ showNsfw, order, shortcutsPosition, shortcutsSize }) => {
 				// Get Shortcuts from DB
 				const scsData = await idbAction.getAll('shortcuts');
 				const orderedShortcuts = order.map((el) =>
 					scsData.find((item) => item.key === el)
 				);
 				setShortcuts(orderedShortcuts);
+
+				// setOptions
+				setOptions({ shortcutsPosition, shortcutsSize });
 
 				// Get BgKeys from DB
 				const bgKeysData = await idbAction.keys(
@@ -36,16 +49,15 @@ const Newtab = () => {
 		);
 	}, []);
 
-	const defaultColor = '#aaa';
-	const classes = useStyle({ defaultColor });
+	const classes = useStyle();
 	return (
 		<DataContext.Provider
 			value={{
-				defaultColor,
 				shortcuts,
 				bgKeys,
-				setBackgrounds: setBgKeys,
+				setBgKeys,
 				setShortcuts,
+				options,
 			}}
 		>
 			<div className={classes.root}>

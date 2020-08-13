@@ -15,7 +15,7 @@ import { idbAction } from '../../utils/helpers';
 const loader = document.querySelector('.loader');
 
 const Main = () => {
-	const { setShortcuts, bgKeys, shortcuts, defaultColor } = React.useContext(
+	const { setShortcuts, bgKeys, shortcuts, options } = React.useContext(
 		DataContext
 	);
 
@@ -82,7 +82,7 @@ const Main = () => {
 		});
 	};
 
-	const classes = useStyle({ defaultColor });
+	const classes = useStyle({ options });
 	return (
 		<div ref={root} className={classes.root}>
 			<div className={classes.shortcuts}>

@@ -36,7 +36,7 @@ const BackgroundOptions = ({ setProgress }) => {
 	const classes = useStyle();
 	return (
 		<Container fixed>
-			<Typography variant="h4">Wallpaper Options</Typography>
+			<Typography variant="h4">General Options</Typography>
 			<BackgroundOptionsForm openSnackbar={openSnackbar} />
 
 			<Typography className={classes.storageTitle} variant="h5">
