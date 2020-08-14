@@ -17,7 +17,9 @@ const BackgroundOptionsDetail = () => {
 	const fetchData = async () => {
 		const bgsRawData = await idbAction.getAll('backgrounds', null, true);
 		const scsRawData = await idbAction.getAll('shortcuts', null, true);
-		const bgsSizes = bgsRawData.map((item) => item?.image?.size ?? 0);
+		const bgsSizes = bgsRawData.map((item) => {
+			return item?.image?.size + new File([item?.thumbnail], 'tn').size ?? 0;
+		});
 		const scsSizes = scsRawData.map((item) => item?.image?.size ?? 0);
 		// bgsSize(numbers), scsSize(numbers), total
 		const data = {
@@ -40,7 +42,7 @@ const BackgroundOptionsDetail = () => {
 			<Table>
 				<TableBody>
 					<TableRow>
-						<TableCell variant="head">Backgrounds</TableCell>
+						<TableCell variant="head">Backgrounds (with Thumbnails)</TableCell>
 						<TableCell>
 							{filesize(data.backgrounds.totalSize)} ({data.backgrounds.files})
 						</TableCell>

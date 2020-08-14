@@ -5,6 +5,9 @@ import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Typography from '@material-ui/core/Typography';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -27,6 +30,19 @@ const Options = () => {
 	// Drawer
 	const [drawerIsOpen, setDrawerIsOpen] = React.useState(true);
 	const toggleDrawer = () => setDrawerIsOpen((initVal) => !initVal);
+
+	// Backdrop
+	const [backdropOpen, setBackdropOpen] = React.useState(false);
+	const [backdropMessage, setBackdropMessage] = React.useState('');
+	const openBackdrop = (message) => {
+		setBackdropOpen(true);
+		setBackdropMessage(message);
+	};
+	const closeBackdrop = () => {
+		setBackdropOpen(false);
+		setTimeout(() => setBackdropMessage(''), 250);
+	};
+	const updateBackdropMessage = (message) => setBackdropMessage(message);
 
 	React.useEffect(() => {
 		loader.classList.add('loaded');
@@ -115,7 +131,14 @@ const Options = () => {
 					<Route
 						exact
 						path={['/wallpapers', '/wallpapers/:page']}
-						render={({ match }) => <Backgrounds match={match} />}
+						render={({ match }) => (
+							<Backgrounds
+								openBackdrop={openBackdrop}
+								closeBackdrop={closeBackdrop}
+								updateBackdropMessage={updateBackdropMessage}
+								match={match}
+							/>
+						)}
 					/>
 					<Route
 						exact
@@ -126,6 +149,13 @@ const Options = () => {
 					<Route render={() => <NotFound />} />
 				</Switch>
 			</main>
+
+			<Backdrop className={classes.backdrop} open={backdropOpen}>
+				<CircularProgress color="inherit" />
+				<Typography variant="h6" className={classes.backdropText}>
+					{backdropMessage}
+				</Typography>
+			</Backdrop>
 		</div>
 	);
 };

@@ -73,4 +73,13 @@ export default makeStyles((theme) => ({
 	mainClose: {
 		marginLeft: theme.spacing(7) + linkBorder,
 	},
+	backdrop: {
+		zIndex: theme.zIndex.drawer + 1,
+		color: '#fff',
+	},
+	backdropText: {
+		marginLeft: theme.spacing(2),
+		fontWeight: 'normal',
+		fontFamily: 'roboto, ubuntu, arial, sans-serif',
+	},
 }));

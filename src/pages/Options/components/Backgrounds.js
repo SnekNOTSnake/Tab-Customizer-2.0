@@ -24,7 +24,12 @@ const infoInit = {
 	type: '',
 };
 
-const Backgrounds = ({ match }) => {
+const Backgrounds = ({
+	match,
+	openBackdrop,
+	closeBackdrop,
+	updateBackdropMessage,
+}) => {
 	const [backgrounds, setBackgrounds] = React.useState([]);
 	const [totalBgs, setTotalBgs] = React.useState(0);
 	const [limit, setLimit] = React.useState(null);
@@ -60,7 +65,8 @@ const Backgrounds = ({ match }) => {
 
 	// Add Image
 	const inputRef = React.useRef(null);
-	const onChangeHandler = (e) => {
+	const onChangeHandler = async (e) => {
+		openBackdrop();
 		const { files } = e.target;
 		if (!files.length) return;
 		// validate all images
@@ -70,22 +76,22 @@ const Backgrounds = ({ match }) => {
 			if (file.size > 2000000) return false;
 			return true;
 		});
-		let update = false;
-		filtered.forEach(async (file, i) => {
-			const thumbnail = await createThumbnail(file);
-			const result = await idbAction.add('backgrounds', {
-				image: file,
-				safe: 1,
-				thumbnail,
-			});
-			if (result) {
-				console.log(`Added background ${file.name}`);
-				update = true;
-				// When it's the last element is executed,
-				// and one or more operation is succeeded, forceUpdate()
-				if (filtered.length === i + 1 && update) forceUpdate();
-			} else console.log(`Unable to add background ${file.name}`);
-		});
+		let done = 0;
+		await Promise.all(
+			filtered.map(async (file, i) => {
+				const thumbnail = await createThumbnail(file);
+				const result = await idbAction.add('backgrounds', {
+					image: file,
+					safe: 1,
+					thumbnail,
+				});
+				if (result) {
+					updateBackdropMessage(`${++done} / ${filtered.length}`);
+				} else console.log(`Unable to add background ${file.name}`);
+			})
+		);
+		forceUpdate();
+		closeBackdrop();
 		inputRef.current.value = null;
 	};
 
@@ -95,7 +101,7 @@ const Backgrounds = ({ match }) => {
 			const bgKeys = await idbAction.keys('backgrounds');
 			setTotalBgs(bgKeys.length);
 		});
-	}, []);
+	}, [state]);
 
 	React.useEffect(() => {
 		(async () => {

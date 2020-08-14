@@ -18,7 +18,7 @@ export const readerFactory = (valueToRead, operation) => {
 				break;
 		}
 		reader.onload = () => resolve(reader.result);
-		reader.onerror = () => reject(reader.error);
+		reader.onerror = () => reject('Error while reading file', reader.error);
 	});
 	return promise;
 };
@@ -98,54 +98,48 @@ export const idbAction = {
 };
 
 export const createThumbnail = (file) => {
-	return new Promise((resolve, reject) => {
+	return new Promise(async (resolve, reject) => {
 		try {
 			const targetWidth = 480;
 			const targetHeight = 270;
-			const reader = new FileReader();
-			reader.onload = () => {
-				const image = new Image();
-				image.src = reader.result;
-				image.onload = () => {
-					const canvas = document.createElement('canvas');
-					const ratio = image.naturalWidth / image.naturalHeight;
-					let finalWidth, finalHeight;
-					if (targetHeight * ratio <= targetWidth) {
-						finalWidth = targetWidth;
-						finalHeight = targetWidth / ratio;
-					} else {
-						finalWidth = targetHeight * ratio;
-						finalHeight = targetHeight;
-					}
-					canvas.width = finalWidth;
-					canvas.height = finalHeight;
-					const ctx = canvas.getContext('2d');
-					ctx.imageSmoothingQuality = 'high';
-					ctx.drawImage(
-						image,
-						0,
-						0,
-						image.naturalWidth,
-						image.naturalHeight,
-						0,
-						0,
-						finalWidth,
-						finalHeight
-					);
-					ctx.canvas.toBlob(
-						(blob) => {
-							const thumbnailReader = new FileReader();
-							thumbnailReader.onload = () => {
-								resolve(thumbnailReader.result);
-							};
-							thumbnailReader.readAsDataURL(blob);
-						},
-						'image/jpeg',
-						0.85
-					);
-				};
+			const actualImageURL = await readerFactory(file, 'readAsDataURL');
+			const image = new Image();
+			image.src = actualImageURL;
+			image.onload = () => {
+				const canvas = document.createElement('canvas');
+				const ratio = image.naturalWidth / image.naturalHeight;
+				let finalWidth, finalHeight;
+				if (targetHeight * ratio <= targetWidth) {
+					finalWidth = targetWidth;
+					finalHeight = targetWidth / ratio;
+				} else {
+					finalWidth = targetHeight * ratio;
+					finalHeight = targetHeight;
+				}
+				canvas.width = finalWidth;
+				canvas.height = finalHeight;
+				const ctx = canvas.getContext('2d');
+				ctx.imageSmoothingQuality = 'high';
+				ctx.drawImage(
+					image,
+					0,
+					0,
+					image.naturalWidth,
+					image.naturalHeight,
+					0,
+					0,
+					finalWidth,
+					finalHeight
+				);
+				ctx.canvas.toBlob(
+					async (blob) => {
+						const imageURL = await readerFactory(blob, 'readAsDataURL');
+						resolve(imageURL);
+					},
+					'image/jpeg',
+					0.85
+				);
 			};
-			reader.readAsDataURL(file);
 		} catch (err) {
 			reject(err);
 		}
