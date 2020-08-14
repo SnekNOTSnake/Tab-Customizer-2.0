@@ -11,30 +11,38 @@ import WorkIcon from '@material-ui/icons/Work';
 import WorkOutlineIcon from '@material-ui/icons/WorkOutline';
 
 import useStyle from '../styles/Background-style';
-import { idbAction } from '../../utils/helpers';
+import { idbAction, readerFactory } from 'Utils/helpers';
 
 const Background = ({ bg, forceUpdate, openPreview, openInfo }) => {
+	const [imageURL, setImageURL] = React.useState('');
+
+	React.useEffect(() => {
+		readerFactory(bg.image, 'readAsDataURL').then((img) => setImageURL(img));
+	}, [bg.image]);
+
 	// Open Info
 	const paperRef = React.useRef(null);
-	const openInfoHandler = (e) => {
+	const openInfoHandler = async (e) => {
 		const img = new Image();
-		img.src = bg.image;
-
-		openInfo(
-			{
-				...bg.imageInfo,
-				lastModified: new Date(bg.imageInfo.lastModified).toLocaleString(),
-				size: filesize(bg.imageInfo.size),
-				width: img.naturalWidth + 'px',
-				height: img.naturalHeight + 'px',
-			},
-			paperRef.current
-		);
+		img.src = imageURL;
+		img.onload = () => {
+			openInfo(
+				{
+					name: bg.image.name,
+					size: filesize(bg.image.size),
+					lastModified: new Date(bg.image.lastModified).toLocaleString(),
+					type: bg.image.type,
+					width: img.naturalWidth + 'px',
+					height: img.naturalHeight + 'px',
+				},
+				paperRef.current
+			);
+		};
 	};
 
 	// Open Preview
 	const openPreviewHandler = (e) => {
-		if (e.target === e.currentTarget) openPreview(bg);
+		if (e.target === e.currentTarget) openPreview({ ...bg, imageURL });
 	};
 
 	// BackgroundActions
@@ -62,7 +70,7 @@ const Background = ({ bg, forceUpdate, openPreview, openInfo }) => {
 				onClick={openPreviewHandler}
 				className={classes.item}
 				style={{
-					backgroundImage: `url(${bg.image})`,
+					backgroundImage: `url(${bg.thumbnail})`,
 				}}
 				ref={paperRef}
 			>

@@ -10,6 +10,9 @@ var webpack = require('webpack'),
 // load the secrets
 var alias = {
 	'react-dom': '@hot-loader/react-dom',
+	Utils: path.resolve(__dirname, 'src/pages/utils/'),
+	DefaultValues: path.resolve(__dirname, 'src/assets/defaultValues.js'),
+	Logo: path.resolve(__dirname, 'src/assets/img/sns-logo.png'),
 };
 
 var secretsPath = path.join(__dirname, 'secrets.' + env.NODE_ENV + '.js');

@@ -73,14 +73,4 @@ export default makeStyles((theme) => ({
 	mainClose: {
 		marginLeft: theme.spacing(7) + linkBorder,
 	},
-	progress: {
-		position: 'absolute',
-		top: 0,
-		left: 0,
-		width: '100%',
-		visibility: 'hidden',
-	},
-	progressShow: {
-		visibility: 'visible',
-	},
 }));

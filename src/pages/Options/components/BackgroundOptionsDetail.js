@@ -7,7 +7,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 
-import { idbAction } from '../../utils/helpers';
+import { idbAction } from 'Utils/helpers';
 
 const BackgroundOptionsDetail = () => {
 	const [data, setData] = React.useState({

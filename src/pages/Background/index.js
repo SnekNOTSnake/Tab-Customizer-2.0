@@ -5,7 +5,7 @@ import {
 	getInitBackgrounds,
 	getInitShortcuts,
 	chromeOptions,
-} from '../../assets/defaultValues';
+} from 'DefaultValues';
 
 // OnCommand
 chrome.commands.onCommand.addListener((command) => {
@@ -53,6 +53,15 @@ chrome.runtime.onInstalled.addListener(async () => {
 		terminated: () => window.alert('Database opening abnormally terminated'),
 	});
 
+	// Dynamic Import
+	const { createThumbnail } = await import('Utils/helpers');
+	const initBgs2 = await Promise.all(
+		initBgs.map(async (el) => {
+			const thumbnail = await createThumbnail(el.image);
+			return { ...el, thumbnail };
+		})
+	);
+
 	// Add all initial Shortcuts
 	{
 		const tx = db.transaction('shortcuts', 'readwrite');
@@ -62,6 +71,6 @@ chrome.runtime.onInstalled.addListener(async () => {
 	// Add all initial Backgrounds
 	{
 		const tx = db.transaction('backgrounds', 'readwrite');
-		await Promise.all([...initBgs.map((sc) => tx.store.add(sc)), tx.done]);
+		await Promise.all([...initBgs2.map((bg) => tx.store.add(bg)), tx.done]);
 	}
 });

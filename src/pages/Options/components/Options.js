@@ -2,7 +2,6 @@ import React from 'react';
 import { Switch, NavLink, Route, Redirect } from 'react-router-dom';
 import clsx from 'clsx';
 
-import LinearProgress from '@material-ui/core/LinearProgress';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -28,7 +27,6 @@ const Options = () => {
 	// Drawer
 	const [drawerIsOpen, setDrawerIsOpen] = React.useState(true);
 	const toggleDrawer = () => setDrawerIsOpen((initVal) => !initVal);
-	const [progress, setProgress] = React.useState(4);
 
 	React.useEffect(() => {
 		loader.classList.add('loaded');
@@ -108,13 +106,6 @@ const Options = () => {
 					[classes.mainClose]: !drawerIsOpen,
 				})}
 			>
-				<LinearProgress
-					className={clsx(classes.progress, {
-						[classes.progressShow]: Boolean(progress),
-					})}
-					variant="determinate"
-					value={progress}
-				/>
 				<Switch>
 					<Route
 						exact
@@ -124,14 +115,12 @@ const Options = () => {
 					<Route
 						exact
 						path={['/wallpapers', '/wallpapers/:page']}
-						render={({ match }) => (
-							<Backgrounds setProgress={setProgress} match={match} />
-						)}
+						render={({ match }) => <Backgrounds match={match} />}
 					/>
 					<Route
 						exact
 						path="/wallpaper-options"
-						render={() => <BackgroundOptions setProgress={setProgress} />}
+						render={() => <BackgroundOptions />}
 					/>
 					<Route exact path="/about" render={() => <About />} />
 					<Route render={() => <NotFound />} />

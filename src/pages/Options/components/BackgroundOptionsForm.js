@@ -12,7 +12,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import { chromeOptions } from '../../../assets/defaultValues';
+import { chromeOptions } from 'DefaultValues';
 import useStyle from '../styles/BackgroundOptionsForm-style';
 
 const BackgroundOptionsForm = (props) => {
@@ -49,6 +49,7 @@ const BackgroundOptionsForm = (props) => {
 		setFieldValue('itemsPerPage', chromeOptions.itemsPerPage);
 		setFieldValue('showNsfw', chromeOptions.showNsfw);
 		setFieldValue('shortcutsPosition', chromeOptions.shortcutsPosition);
+		setFieldValue('shortcutsSize', chromeOptions.shortcutsSize);
 	};
 
 	const classes = useStyle();

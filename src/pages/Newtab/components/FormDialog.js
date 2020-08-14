@@ -14,7 +14,7 @@ import CloseIcon from '@material-ui/icons/CloseRounded';
 import CheckIcon from '@material-ui/icons/CheckRounded';
 import AddIcon from '@material-ui/icons/Add';
 
-import { idbAction, readerFactory } from '../../utils/helpers';
+import { idbAction, readerFactory } from 'Utils/helpers';
 import useStyle from '../styles/FormDialog-style';
 
 // Files Test Validators

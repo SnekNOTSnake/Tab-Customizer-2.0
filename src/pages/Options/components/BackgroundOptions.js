@@ -13,7 +13,7 @@ import BackgroundOptionsDetail from './BackgroundOptionsDetail';
 // Small Alert Component
 const Alert = (props) => <MuiAlert elevation={6} variant="filled" {...props} />;
 
-const BackgroundOptions = ({ setProgress }) => {
+const BackgroundOptions = () => {
 	// Snackbar
 	const [snackbarOpen, setSnackbarOpen] = React.useState(false);
 	const [snackbar, setSnackbar] = React.useState({ message: '', severity: '' });
@@ -25,13 +25,6 @@ const BackgroundOptions = ({ setProgress }) => {
 		setSnackbarOpen(false);
 		setTimeout(() => setSnackbar({ message: '', severity: '' }), 250);
 	};
-
-	// Progress Effect
-	React.useEffect(() => {
-		setProgress(100);
-		const timeout = setTimeout(() => setProgress(null), 750);
-		return () => clearTimeout(timeout);
-	}, [setProgress]);
 
 	const classes = useStyle();
 	return (

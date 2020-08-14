@@ -9,7 +9,7 @@ import useStyle from '../styles/Main-style';
 import ContextMenu from './ContextMenu';
 import FormDialog from './FormDialog';
 import SortableList from './SortableList';
-import { idbAction } from '../../utils/helpers';
+import { idbAction } from 'Utils/helpers';
 
 // Loader element
 const loader = document.querySelector('.loader');

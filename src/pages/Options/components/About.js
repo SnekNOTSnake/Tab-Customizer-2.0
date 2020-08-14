@@ -1,5 +1,5 @@
 import React from 'react';
-import snsLogo from '../../../assets/img/sns-logo.png';
+import snsLogo from 'Logo';
 
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';

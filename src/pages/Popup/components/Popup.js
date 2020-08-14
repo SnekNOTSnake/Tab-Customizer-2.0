@@ -6,7 +6,7 @@ import Paper from '@material-ui/core/Paper';
 import Switch from '@material-ui/core/Switch';
 
 import useStyle from '../styles/Popup-style';
-import logo from '../../../assets/img/sns-logo.png';
+import logo from 'Logo';
 
 const setShowNsfw = (showNsfw) =>
 	chrome.browserAction.setBadgeText({ text: showNsfw ? 'ON' : '' });

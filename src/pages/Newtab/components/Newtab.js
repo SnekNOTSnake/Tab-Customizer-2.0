@@ -3,7 +3,7 @@ import React from 'react';
 import useStyle from '../styles/Newtab-style';
 import Main from './Main';
 import DataContext from '../dataContext';
-import { idbAction } from '../../utils/helpers';
+import { idbAction } from 'Utils/helpers';
 
 const loader = document.querySelector('.loader');
 const getOptions = {

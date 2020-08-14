@@ -7,7 +7,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import CropIcon from '@material-ui/icons/Crop';
 
 import 'react-image-crop/dist/ReactCrop.css';
-import { idbAction } from '../../utils/helpers';
+import { idbAction, createThumbnail } from 'Utils/helpers';
 import useStyle from '../styles/BackgroundPreview-style';
 
 const initCrop = {
@@ -22,7 +22,7 @@ const BackgroundPreview = ({
 	imagePreview,
 	forceUpdate,
 }) => {
-	const { image, imageInfo, key, safe } = imagePreview;
+	const { image, imageURL, key, safe } = imagePreview;
 	const classes = useStyle();
 
 	// Crop
@@ -75,13 +75,16 @@ const BackgroundPreview = ({
 	};
 
 	const cropConfirmHandler = async () => {
-		const file = await getCroppedImg(imgRef.current, crop, imageInfo.name);
+		const file = await getCroppedImg(imgRef.current, crop, image.name);
+		const thumbnail = await createThumbnail(file);
 		const reader = new FileReader();
 		reader.onload = () => {
-			idbAction.put('backgrounds', key, { image: file, safe }).then((value) => {
-				handleClosePreview();
-				forceUpdate();
-			});
+			idbAction
+				.put('backgrounds', key, { image: file, thumbnail, safe })
+				.then((value) => {
+					handleClosePreview();
+					forceUpdate();
+				});
 		};
 		reader.readAsDataURL(file);
 	};
@@ -127,13 +130,13 @@ const BackgroundPreview = ({
 			{cropping ? (
 				<ReactCrop
 					ruleOfThirds
-					src={image}
+					src={imageURL}
 					crop={crop}
 					onImageLoaded={onLoad}
 					onChange={setCrop}
 				/>
 			) : (
-				<img alt="Preview" src={image} />
+				<img alt="Preview" src={imageURL} />
 			)}
 		</Dialog>
 	);

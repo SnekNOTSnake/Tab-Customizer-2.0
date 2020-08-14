@@ -9,7 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
 
-import { idbAction, readerFactory, FileWithURL } from '../../utils/helpers';
+import { idbAction, createThumbnail } from 'Utils/helpers';
 import useStyle from '../styles/Backgrounds-style';
 import Background from './Background';
 import BackgroundPreview from './BackgroundPreview';
@@ -24,10 +24,10 @@ const infoInit = {
 	type: '',
 };
 
-const Backgrounds = ({ match, setProgress }) => {
+const Backgrounds = ({ match }) => {
 	const [backgrounds, setBackgrounds] = React.useState([]);
 	const [totalBgs, setTotalBgs] = React.useState(0);
-	const [limit, setLimit] = React.useState(9);
+	const [limit, setLimit] = React.useState(null);
 
 	// Background Info Dialog
 	const [fileInfo, setFileInfo] = React.useState(infoInit);
@@ -72,9 +72,11 @@ const Backgrounds = ({ match, setProgress }) => {
 		});
 		let update = false;
 		filtered.forEach(async (file, i) => {
+			const thumbnail = await createThumbnail(file);
 			const result = await idbAction.add('backgrounds', {
 				image: file,
 				safe: 1,
+				thumbnail,
 			});
 			if (result) {
 				console.log(`Added background ${file.name}`);
@@ -90,36 +92,26 @@ const Backgrounds = ({ match, setProgress }) => {
 	React.useEffect(() => {
 		chrome.storage.sync.get({ itemsPerPage: 9 }, async ({ itemsPerPage }) => {
 			setLimit(itemsPerPage);
-
-			// Initiate progressbar
-			setProgress(32);
-			let timeout = null;
-
-			// Paginate backgrounds
 			const bgKeys = await idbAction.keys('backgrounds');
+			setTotalBgs(bgKeys.length);
+		});
+	}, []);
+
+	React.useEffect(() => {
+		(async () => {
+			if (!limit) return;
+			// Paginate backgrounds
 			const bgs = await idbAction.getAll(
 				'backgrounds',
 				null,
 				true,
 				null,
 				match.params.page,
-				itemsPerPage
+				limit
 			);
-			const bgsData = await Promise.all(
-				bgs.map(async (bg) => {
-					const imgURL = await readerFactory(bg.image, 'readAsDataURL');
-					return new FileWithURL(bg.image, imgURL, bg);
-				})
-			);
-			setBackgrounds(bgsData);
-			setTotalBgs(bgKeys.length);
-
-			// Stop the progressbar
-			setProgress(100);
-			timeout = setTimeout(() => setProgress(null), 500);
-			return () => clearTimeout(timeout);
-		});
-	}, [match.params.page, setProgress, state]);
+			setBackgrounds(bgs);
+		})();
+	}, [match.params.page, limit, state]);
 
 	const classes = useStyle();
 	return (
