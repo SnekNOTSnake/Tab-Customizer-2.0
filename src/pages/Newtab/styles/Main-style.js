@@ -61,6 +61,7 @@ export default makeStyles((theme) => ({
 			options?.shortcutsPosition === 'bottom'
 				? 'initial'
 				: '100vh',
+		overflowY: 'auto',
 	},
 	sortable: {
 		display: 'flex',

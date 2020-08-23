@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 const drawerWidth = 240;
-const linkBorder = 4;
+const linkBorder = 3;
 
 export default makeStyles((theme) => ({
 	'@global': {
@@ -52,13 +52,16 @@ export default makeStyles((theme) => ({
 				duration: theme.transitions.duration.short,
 			}),
 		},
+		'&.active': {
+			backgroundColor: 'rgba(255, 255, 255, 0.075)',
+		},
 		'&.active::before': {
 			backgroundColor: 'rgba(255, 255, 255, 1)',
 		},
 	},
 	whiteHover: {
 		'&:hover': {
-			backgroundColor: 'rgba(255, 255, 255, 0.075)',
+			backgroundColor: 'rgba(255, 255, 255, 0.125) !important',
 		},
 	},
 	main: {

@@ -28,7 +28,7 @@ if (module.hot) module.hot.accept();
 
 const Options = () => {
 	// Drawer
-	const [drawerIsOpen, setDrawerIsOpen] = React.useState(true);
+	const [drawerIsOpen, setDrawerIsOpen] = React.useState(false);
 	const toggleDrawer = () => setDrawerIsOpen((initVal) => !initVal);
 
 	// Backdrop
