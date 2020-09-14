@@ -7,7 +7,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import CropIcon from '@material-ui/icons/Crop';
 
 import 'react-image-crop/dist/ReactCrop.css';
-import { idbAction, createThumbnail } from 'Utils/helpers';
+import idbAction from 'Utils/idbAction';
+import createThumbnail from 'Utils/createThumbnail';
 import useStyle from '../styles/BackgroundPreview-style';
 
 const initCrop = {

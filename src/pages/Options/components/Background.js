@@ -11,7 +11,8 @@ import WorkIcon from '@material-ui/icons/Work';
 import WorkOutlineIcon from '@material-ui/icons/WorkOutline';
 
 import useStyle from '../styles/Background-style';
-import { idbAction, readerFactory } from 'Utils/helpers';
+import idbAction from 'Utils/idbAction';
+import readerFactory from 'Utils/readerFactory';
 
 const Background = ({ bg, forceUpdate, openPreview, openInfo }) => {
 	const [imageURL, setImageURL] = React.useState('');

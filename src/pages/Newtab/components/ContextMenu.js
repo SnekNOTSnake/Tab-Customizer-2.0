@@ -2,7 +2,7 @@ import React from 'react';
 import cloneDeep from 'lodash.clonedeep';
 
 import DataContext from '../dataContext';
-import { idbAction } from 'Utils/helpers';
+import idbAction from 'Utils/idbAction';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 

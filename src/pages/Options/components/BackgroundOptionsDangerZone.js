@@ -13,7 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import WarningIcon from '@material-ui/icons/Warning';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import { idbAction } from 'Utils/helpers';
+import idbAction from 'Utils/idbAction';
 
 const BackgroundOptionsDangerZone = ({ openSnackbar }) => {
 	// Delete Confirmation

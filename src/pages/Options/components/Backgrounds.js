@@ -9,7 +9,8 @@ import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
 
-import { idbAction, createThumbnail } from 'Utils/helpers';
+import idbAction from 'Utils/idbAction';
+import createThumbnail from 'Utils/createThumbnail';
 import useStyle from '../styles/Backgrounds-style';
 import Background from './Background';
 import BackgroundPreview from './BackgroundPreview';

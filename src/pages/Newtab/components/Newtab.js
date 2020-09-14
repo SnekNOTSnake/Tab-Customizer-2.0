@@ -3,7 +3,7 @@ import React from 'react';
 import useStyle from '../styles/Newtab-style';
 import Main from './Main';
 import DataContext from '../dataContext';
-import { idbAction } from 'Utils/helpers';
+import idbAction from 'Utils/idbAction';
 
 const loader = document.querySelector('.loader');
 const getOptions = {
@@ -27,10 +27,17 @@ const Newtab = () => {
 			async ({ showNsfw, order, shortcutsPosition, shortcutsSize }) => {
 				// Get Shortcuts from DB
 				const scsData = await idbAction.getAll('shortcuts');
-				const orderedShortcuts = order.map((el) =>
-					scsData.find((item) => item.key === el)
-				);
-				setShortcuts(orderedShortcuts);
+				if (scsData.length !== order.length) {
+					window.alert(
+						'The shortcuts data is malfunctioned, please reset the shortcuts from the settings (Settings -> Wallpaper options -> Danger zone)'
+					);
+					setShortcuts(scsData);
+				} else {
+					const orderedShortcuts = order.map((el) => {
+						return scsData.find((item) => item.key === el);
+					});
+					setShortcuts(orderedShortcuts);
+				}
 
 				// setOptions
 				setOptions({ shortcutsPosition, shortcutsSize });
