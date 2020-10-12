@@ -1,7 +1,7 @@
 {
 	"name": "Tab Customizer 2.0",
 	"description": "Modify newtab with random NSFW-controlled background image",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"permissions": ["storage"],
 	"options_page": "options.html",
 	"background": {
