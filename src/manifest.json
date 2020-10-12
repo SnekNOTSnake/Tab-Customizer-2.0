@@ -1,6 +1,6 @@
 {
 	"name": "Tab Customizer 2.0",
-	"description": "Replace the old chrome new tab page with page of your own style",
+	"description": "Modify newtab with random NSFW-controlled background image",
 	"version": "0.1.0",
 	"permissions": ["storage"],
 	"options_page": "options.html",

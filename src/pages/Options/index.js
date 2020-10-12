@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { MemoryRouter as Router } from 'react-router-dom';
 
+import '../../assets/fonts/stylesheet.css';
 import './styles/index.css';
 import Options from './components/Options';
 
